@@ -4,7 +4,7 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
 const Container = styled.main`
-  padding: 0 2.1%;
+  padding: 0 5%;
   margin: 2% 0;
 `
 
