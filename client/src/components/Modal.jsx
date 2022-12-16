@@ -32,25 +32,21 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
-function Modal({ children }) {
-  const [modalState, setModalState] = useState(true);
+function Modal({ children , setModalOpen }) {
 
   const handleModalClose = () => {
-    setModalState(false);
+    setModalOpen(false);
   };
-
-  if (modalState) {
-    return (
-      <ModalContainer>
-        <DialogBox>
-          <CloseButton onClick={handleModalClose}>
-            <IoClose size={25} />
-          </CloseButton>
-          <FormContainer>{children}</FormContainer>
-        </DialogBox>
-      </ModalContainer>
-    );
-  }
+  return (
+    <ModalContainer>
+      <DialogBox>
+        <CloseButton onClick={handleModalClose}>
+          <IoClose size={25} />
+        </CloseButton>
+        <FormContainer>{children}</FormContainer>
+      </DialogBox>
+    </ModalContainer>
+  );
 }
 
 export default Modal;

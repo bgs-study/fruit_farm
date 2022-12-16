@@ -11,7 +11,6 @@ const DetailPage =  () => {
                 console.log(res.data);
                 setDetailData(res.data);
             });
-            
         }
 
         catch(e){
@@ -22,11 +21,7 @@ const DetailPage =  () => {
     useEffect (() => {
         fetchData();
     }, []);
-
-    useEffect (() => {
-        console.log(detailData);
-    }, [detailData]);
-
+    
     return (
         <div>
             <Detail data={detailData}/>
