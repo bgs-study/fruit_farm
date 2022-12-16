@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,createContext } from "react";
 import axios from 'axios';
 import Detail from "../components/Detail";
+
+
+export const DetailContext = createContext();
 
 const DetailPage =  () => {
     const [detailData, setDetailData] = useState(null);
@@ -12,7 +15,6 @@ const DetailPage =  () => {
                 setDetailData(res.data);
             });
         }
-
         catch(e){
             console.log(e);
         }
@@ -24,10 +26,12 @@ const DetailPage =  () => {
     
     return (
         <div>
-            <Detail data={detailData}/>
+            <DetailContext.Provider value={ { detailData }}>
+                <Detail />
+            </DetailContext.Provider>
         </div>
     );
 }
 
-
 export default DetailPage;
+

@@ -1,7 +1,7 @@
-import {useState} from "react";
+import {useState, useContext} from "react";
 import styled from 'styled-components';
 import Modal from "../components/Modal";
-
+import { DetailContext } from "../pages/DetailPage"
 
 const ReviewItems = ({review,all}) =>{
 
@@ -18,7 +18,9 @@ const ReviewItems = ({review,all}) =>{
     })
 }
 
-const Review = ({review})=>{
+const Review = ()=>{
+    const {detailData : data} = useContext(DetailContext);
+    const {review} = data;
     const [modalOpen, setModalOpen] = useState(false);
 
     return (

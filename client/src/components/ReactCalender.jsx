@@ -1,10 +1,11 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useContext } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; // css import
+import { DetailContext } from "../pages/DetailPage"
 
-
-const ReactCalender = ({period}) => {
-    const [start,end] = period;
+const ReactCalender = () => {
+    const {detailData : data} = useContext(DetailContext);
+    const [start,end] = data.period;
     const [value, onChange] = useState(new Date(start));
     
     useEffect(() => {
@@ -17,4 +18,4 @@ const ReactCalender = ({period}) => {
         </div>
     );
 };
-export default ReactCalender;
+export default React.memo(ReactCalender);
