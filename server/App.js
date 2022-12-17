@@ -14,6 +14,7 @@ var corsOptions = {
   origin: 'http://localhost:3000',
   credentials: true,
 };
+
 app.use(cors(corsOptions));
 app.use(morgan('dev'));
 app.use(bodyParser.json());
@@ -22,6 +23,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api', authRouter);
 app.use('/api/farms', farmRouter);
 app.use('/api', reserveRouter);
+
+app.get('/', (req, res) => {
+  res.send('Server Response Success');
+});
 
 db.sequelize
   .sync()
