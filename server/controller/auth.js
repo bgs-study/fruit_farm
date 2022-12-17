@@ -5,10 +5,10 @@ import { config } from '../config/config.js';
 import db from '../models/index.js';
 
 export async function signup(req, res, next) {
-  const { phoneNum, password, name, email, role} = req.body;
-  const found = await  db['Users'].findByUserEmail(email);
+  const { phoneNum, password, name, email, role } = req.body;
+  const found = await db['Users'].findByUserEmail(email);
   if (found) {
-    return res.status(409).json({ message: `${email} already exists`});
+    return res.status(409).json({ message: `${email} already exists` });
   }
   const hashed = await bcrypt.hash(password, config.bcrypt.saltRounds);
   const userId = await db['Users'].createUser({
@@ -20,26 +20,23 @@ export async function signup(req, res, next) {
     role,
   });
   const token = createJwtToken(userId);
-  res.status(201).json({message: "Success", token, email });
+  res.status(201).json({ token, email });
 }
-
 
 export async function login(req, res, next) {
   const { email, password } = req.body;
   const user = await db['Users'].findByUserEmail(email);
-
   if (!user) {
-    return res.status(401).json({ message: "해당 사용자를 찾을 수 없음" });
+    return res.status(401).json({ message: 'Invalid user or password' });
   }
 
   const isValidPassword = await bcrypt.compare(password, user.password);
 
   if (!isValidPassword) {
-    throw new Error("비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요");
+    return res.status(401).json({ message: 'Invalid user or password' });
   }
-
   const token = createJwtToken(user.id);
-  res.status(200).json({message: "Success",  token, email });
+  res.status(200).json({ token, email });
 }
 
 export async function me(req, res, next) {
@@ -47,7 +44,9 @@ export async function me(req, res, next) {
   if (!user) {
     return res.status(404).json({ message: 'User not found' });
   }
-  res.status(200).json({ email: user.email, name: user.name, phoneNum: user.phoneNum });
+  res
+    .status(200)
+    .json({ email: user.email, name: user.name, phoneNum: user.phoneNum });
 }
 
 const createJwtToken = (id) => {
@@ -56,9 +55,9 @@ const createJwtToken = (id) => {
   });
 };
 
-export async function totalUser(req, res, next){
+export async function totalUser(req, res, next) {
   const users = await db['Users'].findAll();
-  if(!users) {
+  if (!users) {
     return res.status(404).json({ message: 'User not found' });
   }
   res.status(200).json(users);
