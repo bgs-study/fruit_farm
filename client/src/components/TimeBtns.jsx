@@ -1,17 +1,27 @@
 import {useState,useContext} from 'react';
-import { DetailContext } from "../pages/DetailPage"
+import { DetailContext } from "../pages/DetailPage";
+import { useSelector, useDispatch } from "react-redux";
+import { getTime } from "../store/FormStore";
 import styled from 'styled-components';
+import { useEffect } from 'react';
 
 const TimeBtns = () =>{
     const {detailData : data} = useContext(DetailContext);
     const times = data.times;
 
-    const [timeBtnActive, setTimeBtnActive] = useState("");
-    const handleTimeSelect = (e) => {
-        setTimeBtnActive(e.target.value);
-    };
+    const [timeBtnActive, setTimeBtnActive] = useState(0);
+    const dispatch = useDispatch();
 
-    return data && times.map( (time,idx)=>{
+    const handleTimeSelect = (e) => {
+        setTimeBtnActive(e.target.value); //index
+    };
+    
+    useEffect(()=>{
+        dispatch(getTime(times[timeBtnActive]));
+    },[timeBtnActive]);
+
+    
+    return  times.map( (time,idx)=>{
         return <div key= {`TimeButtonContainer-${idx}`}>
                 <TimeButton 
                     key= {`TimeButton-${idx}`}

@@ -1,7 +1,8 @@
 import React, { useState, useEffect,createContext } from "react";
 import axios from 'axios';
 import Detail from "../components/Detail";
-
+import { Provider } from "react-redux";
+import  FormStore  from "../store/FormStore";
 
 export const DetailContext = createContext();
 
@@ -26,9 +27,11 @@ const DetailPage =  () => {
     
     return (
         <div>
-            <DetailContext.Provider value={ { detailData }}>
-                <Detail />
-            </DetailContext.Provider>
+            <Provider store={FormStore}>
+                <DetailContext.Provider value={ { detailData }}>
+                    <Detail />
+                </DetailContext.Provider>
+            </Provider>
         </div>
     );
 }
