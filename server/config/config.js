@@ -18,6 +18,7 @@ const config = {
     bcrypt: {
       saltRounds: 12,
     },
+    "logging": false,
     "jwt":JWT_SECRET_KEY
 }
 

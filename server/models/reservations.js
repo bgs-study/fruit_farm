@@ -2,11 +2,11 @@ const Reservations = (sequelize, DataTypes) => {
     const Reservations = sequelize.define(
       "Reservations",
       {
-        reserv_id: {
+        reserve_id: {
           type: DataTypes.INTEGER,
-          allowNull: false,
           unique: true,
-          primaryKey: true
+          primaryKey: true,
+          autoIncrement: true
         },
         date: {
           type: DataTypes.DATEONLY,
@@ -35,13 +35,31 @@ const Reservations = (sequelize, DataTypes) => {
         charset: "utf8",
         collate: "utf8_general_ci",//한글 저장
         tableName: "Reservations",
-        timestamps: true,
-        paranoid: true,
+        timestamps: true
       }
     );
     Reservations.associate = (db) => {
         db.Reservations.belongsTo(db.Users, {foreignKey: 'user_id', targetKey: "id"});
-      };
+    };
+
+    Reservations.createReserve = (reserve) => {
+      // console.log("--------", reserve)
+      return Reservations.create(reserve)
+    };
+    
+    Reservations.findByReserveId = (reserve_id) => {
+      return Reservations.findOne({where: {reserve_id}})
+    }
+
+    Reservations.getUsers = ()=> {
+      return Reservations.findAll();
+    }
+
+    Reservations.deleteReserve = (reserve_id)=> {
+      return Reservations.destroy({where: {reserve_id}})
+    }
+  
+    
     return Reservations;
   }
   

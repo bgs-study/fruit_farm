@@ -79,8 +79,14 @@ function Login() {
     try {
       console.log("전달되는 데이터", data);
       const res = await userApi.post("//localhost:3500/api/login", data);
+
+      if(res.status !== 200) {
+        alert("로그인 실패");
+        window.location.assign = "/login";
+      }
+      
       const token = res.data.token;
-      const refreshToken = res.data.refreshToken;
+      // const refreshToken = res.data.refreshToken;
 
       localStorage.setItem("token", token);
       localStorage.setItem("loggedIn", "true");
