@@ -16,15 +16,14 @@ const GlobalStyle = createGlobalStyle`
         padding: 0;
     }
 
-    ul, li {
-        list-style: none;
-    }
+  ul, li {
+    list-style: none;
+  }
 
-    a {
-        text-decoration: none;
-        display: block;
-        color: #000;
-    }
-
+  a {
+    text-decoration: none;
+    display: block;
+    color: #000;
+  }
 `
 export default GlobalStyle;

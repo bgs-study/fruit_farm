@@ -22,4 +22,19 @@ async function post(endpoint, data) {
   return res;
 }
 
-export { post };
+// api 로 user정보 GET 요청 
+async function get(endpoint) {
+  const apiUrl = endpoint;
+  console.log(`%cGET 요청: ${apiUrl} `, "color: #a25cd1;");
+
+  const res = await axios(apiUrl, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  });
+
+  return res;
+}
+
+export { post, get };

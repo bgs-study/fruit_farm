@@ -114,7 +114,7 @@ const afterLoginList = [
   {
     id: 3,
     name :'내정보관리',
-    path : '/login',
+    path : '/mypage',
   },
   {
     id: 4,
