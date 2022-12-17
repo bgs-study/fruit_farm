@@ -10,16 +10,17 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 var corsOptions = {
-    origin: "http://localhost:8081"
+  origin: "http://localhost:3000",
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => {
-    res.send('Server Response Success');
-})
+app.get("/", (req, res) => {
+  res.send("Server Response Success");
+});
 
 app.use("/api", router);
 
@@ -33,16 +34,15 @@ app.use("/api", router);
 
 db.sequelize
   .sync()
-  .then(()=> {
-    console.log("데이터베이스 연결 성공!")
+  .then(() => {
+    console.log("데이터베이스 연결 성공!");
   })
-  .catch((err)=> {
+  .catch((err) => {
     console.log(err);
   });
-
 
 app.listen(PORT, () => {
   console.log(`Server On : http://localhost:${PORT}/`);
 });
 
-export {app};
+export { app };
