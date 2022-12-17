@@ -1,3 +1,8 @@
+import Sequelize from 'sequelize';
+const Op = Sequelize.Op;
+
+import db from '../models/index.js';
+
 const Farms = (sequelize, DataTypes) => {
   const Farms = sequelize.define(
     'Farms',
@@ -44,6 +49,13 @@ const Farms = (sequelize, DataTypes) => {
   //     targetKey: 'id',
   //   });
   // };
+
+  Farms.findById = (id) => {
+    return db.Users.findByPk(id).then((data) => {
+      return data.dataValues.id;
+    });
+  };
+
   Farms.getAll = () => {
     return Farms.findAll();
   };
@@ -52,7 +64,29 @@ const Farms = (sequelize, DataTypes) => {
     return Farms.findAll({ where: { type } });
   };
 
-  Farms.createFarm = (farmInfo) => {
+  Farms.getByAddress = (address) => {
+    return Farms.findAll({
+      where: {
+        address: {
+          [Op.like]: '%' + address + '%',
+        },
+      },
+    });
+  };
+
+  // Farms.update = (id, type, name, address, description, owner) => {
+  //   return Farms.findByPk(id).then((data) => {
+  //     return (
+  //       (data.type = type),
+  //       (data.name = name),
+  //       (data.address = address),
+  //       (data.description = description),
+  //       (data.owner = owner)
+  //     );
+  //   });
+  // };
+
+  Farms.create = (farmInfo) => {
     return Farms.create(farmInfo).then((data) => {
       return data;
     });
