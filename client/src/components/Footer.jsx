@@ -1,13 +1,15 @@
 import styled from 'styled-components';
 
 const StyledContainer = styled.footer`
-    position:fixed;
+    position:sticky;
     bottom:0;
     font-size: 1rem;
     border-top: 1px solid lightgray;
     width: 100%;
-    padding: 1% 5%;
+    padding: 2% 5%;
     background-color:#fff;
+    height: 100%;
+    z-index: 99;
 `;
 
 const StyledFooter= styled.div`

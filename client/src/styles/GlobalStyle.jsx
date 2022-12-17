@@ -1,17 +1,16 @@
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
-    * {
+    html,body {
+      height: 100%;
+    }
+    
+    html {
+        font-size: 100%;
         box-sizing: border-box;
     }
 
-    html {
-        font-size: 100%;
-    }
-
     body {
-        min-height: 100vh;
-        min-width: 100vw;
         margin: 0;
         padding: 0;
     }

@@ -63,6 +63,7 @@ const StyledMenu = styled.div`
  width: 20%;
  padding: 1% 0;
  box-sizing: border-box;
+ z-index: 100;
 `
 const StyledLink = styled(Link)`
   padding: 5%;

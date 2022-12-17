@@ -4,8 +4,10 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 const Container = styled.main`
-  padding: 0 5%;
-  margin: 2% 0;
+  min-height: 100vh;
+  padding: 3% 5% 10% 5%;
+  box-sizing: border-box;
+  position: relative;
 `
 
 const Layout = () => {
