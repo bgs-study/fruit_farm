@@ -1,0 +1,13 @@
+{
+  "id": 1234,
+  "name": "노랑이",
+  "phoneNumber": "01012345678",
+  "email": "nado@nadoddam.com",
+  "farmName": "귤귤꿀꿀",
+  "programName": "귤 수확 체험",
+  "img": "image_5033818151512088297470.jpg",
+  "date": "2022년 12월 25일",
+  "time": "10:00 ~ 11:45",
+  "count": 4,
+  "programPrice": 10000
+}

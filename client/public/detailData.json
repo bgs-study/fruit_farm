@@ -1,0 +1,50 @@
+{
+  "title": "단감 따기 체험",
+  "img": "alt",
+  "location" : "Geoje-myeon, Geoje-si, 경상남도, 한국", 
+  "description": "단감따기 체험입니다. 함께 즐겨요",
+  "grade": "4.5",
+  "price": 7000,
+  "times" : ["8:00 ~ 9:45", "10:00 ~ 11:45", "14:00 ~ 15:45"],
+  "review": [
+  {
+      "id": "userId1",
+      "name":"username1",
+      "content":"이것은 리뷰1입니다."
+  },
+  {
+      "id" :"userId2",
+      "name":"username2",
+      "content" : "이것은 리뷰2입니다."
+  },
+  {
+    "id": "userId3",
+    "name":"username1",
+    "content":"이것은 리뷰1입니다."
+},
+{
+    "id" :"userId4",
+    "name":"username2",
+    "content" : "이것은 리뷰2입니다."
+},
+{
+  "id": "userId5",
+  "name":"username1",
+  "content":"이것은 리뷰1입니다."
+},
+{
+  "id" :"userId6",
+  "name":"username2",
+  "content" : "이것은 리뷰2입니다."
+} ,
+{
+  "id" :"userId7",
+  "name":"username2",
+  "content" : "이것은 리뷰2입니다."
+} 
+  ],
+  "company" : { "name": "땡글땡글 감농장", "tel": "052-3334-1111" , "id":"siejf124D", "ceo":"박지혜"},
+  "latitude": 33.450701,
+  "longitude":126.570667,
+  "period": ["2022/12/15","2023/2/28"] 
+}
