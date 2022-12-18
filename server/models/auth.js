@@ -17,7 +17,7 @@ const Users = (sequelize, DataTypes) => {
         unique: true,
       },
       phoneNum: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING(64),
         allowNull: false,
       },
       role: {
@@ -63,11 +63,11 @@ const Users = (sequelize, DataTypes) => {
     return Users.create(user).then((data) => data.dataValues.id);
   }
 
-  // Users.updateUser = ({userId, update})=> {
+  Users.updateUser = ({userId, update})=> {
 
-    
-
-  // }
+    return Users.update(update, {where: {id: userId}})
+    // return {"update_count": result, update};
+  }
 
   return Users;
 };

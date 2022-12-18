@@ -30,6 +30,10 @@ const Reservations = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
+        personnel: {
+          type: DataTypes.INTEGER,
+          allowNull: false
+        }
       }, 
       {
         charset: "utf8",
@@ -43,7 +47,6 @@ const Reservations = (sequelize, DataTypes) => {
     };
 
     Reservations.createReserve = (reserve) => {
-      // console.log("--------", reserve)
       return Reservations.create(reserve)
     };
     
@@ -58,8 +61,11 @@ const Reservations = (sequelize, DataTypes) => {
     Reservations.deleteReserve = (reserve_id)=> {
       return Reservations.destroy({where: {reserve_id}})
     }
+
+    Reservations.updateReserve = ({reserve_id, update}) => {
+      return Reservations.update(update, {where: {reserve_id}})
+    }
   
-    
     return Reservations;
   }
   

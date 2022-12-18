@@ -5,14 +5,16 @@ import { validate } from "../middleware/validate.js";
 import * as reserveController from "../controller/reserve.js";
 import { isAuth } from "../middleware/auth.js";
 
-const reserveRouter = express.Router();
+const router = express.Router();
 
 
-reserveRouter.post("/reserve",isAuth, reserveController.reserve); //예약 등록
+router.post("/reserve",isAuth, reserveController.reserve); //예약 등록
 
-reserveRouter.get("/reservelist", reserveController.reserveList); // 모든 예약 정보 조회
+router.get("/reservelist", reserveController.reserveList); // 모든 예약 정보 조회
 
-reserveRouter.delete("/reserveList/:id",  reserveController.reserveDrop); //예약 삭제
+router.delete("/reserveList/:id",  reserveController.reserveDrop); //예약 삭제
 
 
-export default reserveRouter;
+router.patch("/reserve/:id", reserveController.reserveUpdate)
+
+export default router;
