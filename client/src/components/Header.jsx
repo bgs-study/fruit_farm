@@ -5,6 +5,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { HiUserCircle, HiMenu } from "react-icons/hi";
 import { useSelector, useDispatch } from "react-redux";
 import { showLogin, showModal, showRegister } from "../store/ModalSlice";
+import { getToken } from "../utils/utils";
 
 const StyledHeader = styled.header`
   width: 100%;
@@ -138,7 +139,7 @@ const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
   const dispatch = useDispatch();
 
   const [toggleMenu, setToggleMenu] = useState(false);
-  const token = localStorage.getItem("token");
+  const token = getToken();
   const navigate = useNavigate();
   const params = useParams();
   const ref = useRef();
@@ -148,10 +149,9 @@ const Header = ({ setLoginIsOpen, setRegisterIsOpen }) => {
   };
 
   const handleClickOutSide = (e) => {
-    console.log(ref.current.contains(e.target));
     if (toggleMenu && !ref.current.contains(e.target)) {
       setToggleMenu(false);
-    }
+    };
   };
 
   useEffect(() => {
