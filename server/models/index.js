@@ -2,6 +2,7 @@ import Sequelize from 'sequelize';
 import Users from './auth.js';
 import Reservations from './Reservations.js';
 import Farms from './farm.js';
+import Reviews from './review.js';
 // import { fileURLToPath } from 'url';
 // const __filename = fileURLToPath(import.meta.url);
 // const env = process.env.NODE_ENV || 'development';
@@ -18,6 +19,7 @@ const sequelize = new Sequelize(
 db.Users = Users(sequelize, Sequelize);
 db.Reservations = Reservations(sequelize, Sequelize);
 db.Farms = Farms(sequelize, Sequelize);
+db.Reviews = Reviews(sequelize, Sequelize);
 
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
