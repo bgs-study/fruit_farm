@@ -1,6 +1,6 @@
-import React, { useEffect , useContext } from 'react'
+import React, { useEffect , useContext } from 'react';
 import styled from 'styled-components';
-import { DetailContext } from "../pages/DetailPage"
+import { DetailContext } from '../pages/DetailPage';
 
 const { kakao } = window;
 
@@ -32,7 +32,7 @@ const Location = () =>{
     return (
         <div>
             <p>찾아오는길</p>
-            <MapDiv id="map"></MapDiv>
+            <MapDiv id='map'></MapDiv>
         </div>
     );
 };

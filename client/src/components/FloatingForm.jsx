@@ -1,13 +1,13 @@
-import {useState,useEffect,useContext} from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getHeadCount ,getTotalPrice} from "../store/FormSlice";
-import { useNavigate } from "react-router-dom";
-import { DetailContext } from "../pages/DetailPage";
-import styled from "styled-components";
+import {useState,useEffect,useContext} from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getHeadCount ,getTotalPrice} from '../store/FormSlice';
+import { useNavigate } from 'react-router-dom';
+import { DetailContext } from '../pages/DetailPage';
+import styled from 'styled-components';
 
 const FloatingForm = () =>{
     const {detailData:data} = useContext(DetailContext);
-    const {price,title,company} = data;
+    const {price,title,company,period,times} = data;
     
     const [headCount, setHeadCount] = useState(1);
     const [totalPrice, setTotalPrice] = useState(undefined);
@@ -23,21 +23,25 @@ const FloatingForm = () =>{
     const handleSubmit = (e) =>{    
         console.log({
             ...formData,
-            "price":price,
-            "farm": company.name,
-            "programName":title
+            'price':price,
+            'farm': company.name,
+            'programName':title,
+            'period':period,
+            'times' : times,
         });     
 
         // 페이지 이동전, 인원이 초과 되는 지 확인을 위한 get 요청 
         // 인원초과 되면 alert창 + return 
         // + 동시접속에 대한 확인요청
 
-        navigate("/pay",{
+        navigate('/pay',{
             paymentData : {
                 ...formData,
-                "price":price,
-                "farm": company.name,
-                "programName":title
+                'price':price,
+                'farm': company.name,
+                'programName':title,
+                'period':period,
+                'times' : times,
             }
         });
     };
@@ -45,7 +49,7 @@ const FloatingForm = () =>{
     useEffect(()=>{
         setTotalPrice(headCount*price);
         dispatch(getHeadCount(headCount));
-    },[headCount,price])
+    },[headCount,setTotalPrice])
 
     useEffect(()=>{
         dispatch(getTotalPrice(totalPrice));
@@ -60,7 +64,7 @@ const FloatingForm = () =>{
                 {[...Array(10).keys()].map(n => <option key={`HeadCount-${n+1}`} value={n+1} >{n+1}</option>)}
             </SelectBox>
             <span>명</span>
-            <button type="submit">예약하기</button>
+            <button type='submit'>예약하기</button>
             <p>총 합게 : { totalPrice || price }</p> 
         </Form>
     );

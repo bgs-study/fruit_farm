@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    date: "",
+    date: new Date().toISOString().substring(0,10),
     totalPrice : 0,
     headCount : 0,
     time:"",

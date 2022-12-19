@@ -1,7 +1,7 @@
-import {useState, useContext} from "react";
+import {useState, useContext} from 'react';
 import styled, {css} from 'styled-components';
-import Modal from "../components/Modal";
-import { DetailContext } from "../pages/DetailPage"
+import Modal from '../components/Modal';
+import { DetailContext } from '../pages/DetailPage'
 
 const ReviewItems = ({review,showAll}) =>{
     const [tab, setTab] = useState(true);
