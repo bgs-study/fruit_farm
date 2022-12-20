@@ -1,0 +1,23 @@
+
+{
+    "reservation": [
+        {
+            "data": "2022-10-12",
+            "total_price": 12000,
+            "status": "예약취소",
+            "personnel": 4
+          },
+          {
+          "data": "2022-11-12",
+          "total_price": 14000,
+          "status": "예약완료",
+          "personnel": 2
+          },
+          {
+          "data": "2022-12-12",
+          "total_price": "52000",
+          "status": "체험완료",
+          "personnel": 3
+          }
+    ]
+  }

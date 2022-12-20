@@ -1,6 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import styled from 'styled-components'
 import { StyledButton, StyledUserInfo, StyledUserInfoWrap } from '../pages/MyPage';
+import * as userApi from "../lib/userApi";
+import { useNavigate } from 'react-router-dom';
 
 const Input = styled.input`
   border-radius: 10px;
@@ -8,49 +10,56 @@ const Input = styled.input`
   padding: 10px;
 `
 
-const MyPageEdit = ({id, name, title}) => {
-  const [gname, setName] = useState({})
+const MyPageEdit = ({id, name, title, userId}) => {
+  const [reName, setReName] = useState({});
   const [change, setChange] = useState(false);
   const textInput = useRef();
+  const navigate = useNavigate()
+
+  const setReplaceName = useCallback(() => {
+    setReName({
+      value: name,
+    });
+  },[name]);
 
   useEffect(() => {
-    let replaceName = '';
+    setReplaceName();
+  },[setReplaceName]);
+ 
+  const changeEditMode = (e) => {
+    setChange(cur => !cur);
+  };
 
-    if(id === 'tel') {
-      replaceName =  name.slice(0, 3) + "*".repeat(name.length - 6) + name.slice(-4);
-    }else if(id === 'password'){
-      replaceName =  "*".repeat(name.length)
-    }else{
-      replaceName = name;
+  const upDateComponents = async() => {
+    if(textInput.current.dataset.id === "email"){
+      
+    }
+    try {
+      setChange(cur => !cur);
+      setReName({
+      ...reName,
+      value: textInput.current.value,
+      });
+     await userApi.patch(`//localhost:3500/api/myInfo/${userId}`, {
+      [textInput.current.dataset.id]: textInput.current.value,
+      }); 
+    } catch(err) {
+      console.log(err)
     }
     
-    setName({
-      value: replaceName,
-    })
-  },[name])
- 
-  const changeEditMode = () => {
-    setChange(cur => !cur)
-  }
-
-  const upDateComponents = () => {
-    setChange(cur => !cur)
-    setName({
-      ...gname,
-      value: textInput.current.value
-    })
+    navigate('/mypage')
   }
 
   const DefaultView = () => {
     return (
       <StyledUserInfo>
-        <div><span>{gname.value === undefined ? ".." : gname.value}</span></div>
+        <div><span>{reName.value}</span></div>
         <div>
           <StyledButton onClick={changeEditMode}>수정</StyledButton> 
         </div>
       </StyledUserInfo>
     )
-  }
+  };
 
   const RenderEditView = () => {
     return (
@@ -60,8 +69,9 @@ const MyPageEdit = ({id, name, title}) => {
             id={id}
             name={id} 
             type={id === "password" ? "password" : "text"} 
-            defaultValue={gname.value}
+            defaultValue={reName.value}
             ref={textInput}
+            data-id={id}
           />
         </div>
         <div>
@@ -70,7 +80,7 @@ const MyPageEdit = ({id, name, title}) => {
         </div>
       </StyledUserInfo>
     )
-  }
+  };
 
   return(
     <StyledUserInfoWrap>

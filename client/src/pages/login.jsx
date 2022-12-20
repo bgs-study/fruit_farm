@@ -7,7 +7,7 @@ import { closeModal, showRegister } from '../store/ModalSlice';
 // 입력 폼, 유효성 검사 패키지
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { loginformSchema } from '../hooks/useForm';
 
 const ModalTitle = styled.h1`
 	color: blue;
@@ -52,20 +52,12 @@ function Login() {
 	const loginModalState = useSelector((state) => state.modal.loginModal);
 	const dispatch = useDispatch();
 
-	const formSchema = yup.object({
-		email: yup
-			.string()
-			.required('이메일을 입력해주세요')
-			.email('이메일 형식이 아닙니다.'),
-		password: yup.string().required('비밀번호를 입력해주세요'),
-	});
-
 	const {
 		register,
 		handleSubmit,
 		reset,
 		formState: { isSubmitting, errors }, // isSubmitting: 제출중인지 여부
-	} = useForm({ mode: 'onChange', resolver: yupResolver(formSchema) });
+	} = useForm({ mode: 'onChange', resolver: yupResolver(loginformSchema) });
 
 	const loginUser = async (data) => {
 		try {

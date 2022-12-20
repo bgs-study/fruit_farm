@@ -9,6 +9,7 @@ import Payment from './pages/Payment';
 import { MyPage } from './pages/MyPage';
 import Farm from './pages/Farm';
 import TimeTable from './pages/TimeTable';
+import MyReservation from "./pages/MyReservation";
 
 function App() {
 	return (
@@ -23,6 +24,7 @@ function App() {
 					<Route path="/mypage" element={<MyPage />} />
 					<Route path="/farm" element={<Farm />} />
 					<Route path="/farm/timetable" element={<TimeTable />} />
+         			<Route path="/myreservation" element={<MyReservation />} />
 					{/* 해당부분에 라우터 넣으면 됩니다. */}
 				</Route>
 			</Routes>
