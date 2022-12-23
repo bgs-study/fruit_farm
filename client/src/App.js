@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes} from 'react-router-dom';
 import './App.css';
 import Layout from './pages/Layout';
 import Home from './pages/Home';
@@ -21,7 +21,7 @@ function App() {
 					<Route path="/" element={<Home />} />
 					<Route path="/login" element={<Login />} />
 					<Route path="/register" element={<Register />} />
-					<Route path="/detail" element={<DetailPage />} />
+					<Route path="/detail/:id" element={<DetailPage />} />
 					<Route path="/pay" element={<Payment />} />
 					<Route path="/mypage" element={<MyPage />} />
 					<Route path="/farm" element={<Farm />} />

@@ -12,7 +12,7 @@ const MapDiv = styled.div`
 
 const IsDetailPage= ()=>{
     const {detailData:data} = useContext(DetailContext);
-    return data.location;
+    return data.address;
 }
 
 const Location = (props) =>{

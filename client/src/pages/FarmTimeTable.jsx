@@ -1,177 +1,64 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { showModal } from '../store/ModalSlice';
-import ModalContainer from './../components/Modal'
-import Calender from '../components/ReactCalender';
+import ModalContainer from '../components/Modal'
+import FarmPeriod from "../components/FarmPeriod";
 import FarmFormat from '../components/FarmFormat';
 import styled from 'styled-components';
 import axios from 'axios';
+import FarmTime from "../components/FarmTime";
 
-const CalenderContainer = styled.div`
-    display : flex;
-    justify-content : center;
+const Subject = styled.h2`
+	text-align: center;
+	margin-top: 7%;
+	margin-bottom: 3%;
 `;
-const CalenderContent = styled.div`
-    display : block;
+const TimeTableList = styled.div`
+    border:1px black solid;
+    padding 15px;
+    margin-bottom: 20px;
+    margin-left: 3%;
+`;
+const Img = styled.img`
+    margin-right: 20px;
+`;
+const TimTableContent = styled.div`
+    display:block
     width: 100%;
-    text-align : center;
+`; 
+const TimTableItem = styled.div`
+    display:flex;
 `;
-const StartCalenderContent = styled.div``;
-const EndCalenderContent = styled.div``;
-
-
-const FarmPeriod = () =>{
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
-    const [startCalenderOpen, setStartCalenderOpen] = useState(false);
-    const [endCalenderOpen, setEndCalenderOpen] = useState(false);
-
-    const dispatch = useDispatch();
-    const date = useSelector((state) => state.form.date);
-    
-    useEffect (() => {
-        setStartDate(date);
-    },[startCalenderOpen]);
-
-    useEffect (() => {
-        setEndDate(date);
-    },[endCalenderOpen]);
-
-    return (        
-        <CalenderContainer>
-            <CalenderContent>
-            <StartCalenderContent>
-                <button onClick={()=>setStartCalenderOpen(!startCalenderOpen)}>시작날짜</button>
-                {
-                    startCalenderOpen ? <Calender period={{start : new Date()}} create/> : null
-                }
-                <p>{!startCalenderOpen && startDate}</p>
-            </StartCalenderContent>
-        </CalenderContent>
-        <CalenderContent>
-            <EndCalenderContent>
-                <button  onClick={()=>setEndCalenderOpen(!endCalenderOpen)}>마감날짜</button>
-                {
-                    endCalenderOpen ? <Calender period={{start : new Date(startDate)}} create/> : null
-                }
-                <p>{!endCalenderOpen && endDate}</p>
-            </EndCalenderContent>
-        </CalenderContent>
-    </CalenderContainer>
-    )
-};
-
-const FarmTime = () =>{
-    const [timeList, setTimeList] = useState([]);
-    const [startTime, setStartTime] = useState('');
-    const [endTime, setEndTime] = useState('');
-    const [forTime, setForTime] = useState('');
-    const [maxHeadCount, setMaxHeadCount] = useState(0);
-    const [maxHeadCountList, setMaxHeadCountList] = useState([]);
-
-
-    const renderTime = () =>{
-        return (
-        <div>
-            {
-            timeList.map((time,idx) => { 
-                return (
-                    <div key={`${time[0]}-${time[1]}-${idx}`}>
-                        <button onClick={onDelTime} value={idx}>-</button>
-                        <li>{idx+1}타임  {time[0]} : {time[1]} {maxHeadCountList[idx]}명</li>
-                    </div>
-                )
-            })  
-        }    
-        </div>);
-    };
-
-    const onCreateTime = () =>{
-        if(!isNaN(startTime)){alert("Please enter start time");return;}
-        if(maxHeadCount<1){alert("Please enter headCount");return;}
-        if(forTime<1){alert("Please enter forTime");return;}
-        
-        for (var i=0;i<timeList.length;i++){
-            if(timeList[i][1] > startTime){
-                alert("Please enter correct forTime");return;
-            }
-        }
-        setTimeList([...timeList, [startTime,endTime]]);
-        setMaxHeadCountList([...maxHeadCountList,maxHeadCount]);
-    };
-
-    const onDelTime = (e) =>{
-        const idx = e.target.value;
-        timeList.splice(idx,1);
-        setTimeList([...timeList]);
-
-        maxHeadCountList.splice(idx,1);
-        setMaxHeadCountList([... maxHeadCountList]);
-    };
-
-    const handleStartTime = (e) =>{
-        setStartTime(e.target.value);
-    };
-    const handleMaxHeadCount = (e)=>{
-        setMaxHeadCount(e.target.value);
+const AddTimTable = styled.button`
+    display:block;
+    margin-left:auto;
+    margin-bottom:10px;
+`;
+const TimeTableButtons = styled.div`
+    display:flex;
+    flex-direction:column;
+    margin-left:auto;
+`;
+const TimeTableButton =styled.button`
+    :not(:last-child) {
+        margin-bottom:10px;
     }
+`;
 
-    useEffect(() => {
-        const [h,m] = startTime.split(":");      
-        setEndTime([parseInt(h)+parseInt(forTime),m].join(":"));
-    },[startTime]);
 
-    
-    useEffect (() => {
-        const formTimeInput = document.getElementById('forTime');
-        timeList.length >0 ? formTimeInput.readOnly = true : formTimeInput .readOnly = false;
-        renderTime();
-    },[timeList]);
-
-    return (
-        <>
-        { timeList &&
-            <>
-                <div style={{display:"flex"}}>
-                    <div>
-                        <label>시간</label>
-                        <input type="text" id="forTime" placeholder="체험시간을 입력하세요" value={forTime} onChange={(e)=>setForTime(e.target.value)}/>
-                    </div>
-                    <div>
-                        <label>시작시각</label>
-                        <input type='time'  value={startTime} onChange={handleStartTime}/>
-                    </div>
-                    <div>
-                        <label>인원</label>
-                        <input style={{width:"40px"}} type='text' placeholder='인원' value={maxHeadCount} onChange={handleMaxHeadCount} ></input>
-                    </div>
-
-                    <div>
-                        <label>추가</label>
-                        <button type='button' onClick={onCreateTime}>+</button>
-                    </div>
-                </div>   
-                <div>
-                    {renderTime()}
-                </div>
-            </>
-        }
-        </>
-    )
-};
-
+//TimeTable
 const TimeTable = ()=>{
     const [timeTable, setTimeTable] = useState([]);
-
-
+    const [postData, setPostData] = useState({});
+    const [cost, setCost] = useState(0);
     const dispatch = useDispatch();
     const modalOpen = useSelector((state) => state.modal.modal);
 
     const fetchData = async () => {
         try {
-            await axios.get('/reservation.json').then((res) => {
+            await axios.get('/timetable.json').then((res) => {
                 // console.log(res.data);
-                // setReservation(res.data);
+                setTimeTable(res.data);
             });
         }
         catch(e){
@@ -179,36 +66,85 @@ const TimeTable = ()=>{
         }
     };
 
+    const stateLiftining = state => {
+        console.log("state",state);
+        console.log("before",postData);
+        console.log("set",{...postData,...state});
+        setPostData({...postData,...state});
+    }
     
+    useEffect(()=>{
+        console.log("after",postData);
+    },[postData])
+
     const handleSubmit = (e) =>{   
         e.preventDefault();
-        console.log(
+        console.log({...postData,cost});
+    };
 
-            
-        );
+    const onTimeTableDelete = (idx) => {
+        timeTable.splice(idx,1);
+        setTimeTable([...timeTable]);
+        // 삭제 요청api
+    };
 
-        // navigate('/pay',{
-        //     state : {
-        //         시간표id
-        //         농장id,
-        //         headcount:최대인원
-        //         price:price,
-        //         period :period,
-        //         times : [start,end],
-        //     }
-        // });
+    const onTimeTableUpdate = (e)=>{
+        dispatch(showModal())
     };
 
     useEffect (() => {
         fetchData();
     }, []);
 
-
-
+    
     return (
         <>
         <FarmFormat>
-            { timeTable && <button onClick = {() => dispatch(showModal())}>추가하기</button>}
+            
+            <Subject>체험시간표</Subject>
+            <AddTimTable onClick = {() => dispatch(showModal())}>추가하기</AddTimTable>
+            { timeTable && 
+                    timeTable.map((table,idx) =>{
+
+                        return(
+                            <TimeTableList>
+                                <h4>체험테이블{idx+1}</h4>
+                                <TimTableItem>
+                                    <Img alt='농장이미지'></Img>
+                                    <TimTableContent>
+                                        <div>
+                                            <span>날짜 : </span>
+                                            <span>{table.date}</span>
+                                        </div>
+                                        <div>
+                                            <span>시작시간 : </span>
+                                            <span>{table.start_time}</span>
+                                        </div>
+
+                                        <div>
+                                            <span>끝나는시간 : </span>
+                                            <span>{table.end_time}</span>
+                                        </div>
+                                        
+                                        <div>
+                                            <span>가격 : </span>
+                                            <span>{table.price}</span>  
+                                        </div>
+                                            
+                                        <div>
+                                            <span>인원수 : </span>
+                                            <span>{table.personnel}</span>
+                                        </div>
+                                </TimTableContent>
+                                <TimeTableButtons>
+                                    <TimeTableButton type='button' onClick={()=>onTimeTableUpdate(idx)}>수정</TimeTableButton>
+                                    <TimeTableButton type='button' onClick={()=>onTimeTableDelete(idx)}>삭제</TimeTableButton>
+                                </TimeTableButtons>
+                                </TimTableItem>
+                            </TimeTableList>
+                        )
+                    })
+            }
         </FarmFormat>
 
         { modalOpen && <ModalContainer>
@@ -216,17 +152,17 @@ const TimeTable = ()=>{
                     <h1>체험시간표</h1>
                     <div>
                         <h3>체험 날짜</h3>
-                        <FarmPeriod />  
+                        <FarmPeriod onStateLiftining ={stateLiftining}/>  
                     </div>
 
                     <div>
                         <h3>체험 시간</h3>
-                        <FarmTime></FarmTime>
+                        <FarmTime onStateLiftining={stateLiftining}></FarmTime>
                         
                     </div>
                     <div>
                         <h3>체험 비용</h3>
-                        <input type='text' placeholder='입력하세요'></input>
+                        <input type='text' placeholder='입력하세요' value={cost} onChange={(e)=>setCost(e.target.value)}></input>
                     </div>
                     <button type='submit'>추가하기</button>
                 </form>

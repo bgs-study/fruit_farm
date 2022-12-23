@@ -54,12 +54,12 @@ const TimButtonContainer = styled(DisplayFlex)`
 
 
 
-const DetailHeader = ({ title, location }) => {
+const DetailHeader = ({ name, address }) => {
     return (
         <Header>
-            <Title>{title}</Title>
-            <p>{location}</p>
-            <img src='' alt={`${title}이미지`} />
+            <Title>{name}</Title>
+            <p>{address}</p>
+            <img src='' alt={`${name}이미지`} />
         </Header>
     );
 };
@@ -89,30 +89,31 @@ const DetailCompany = ({ company }) => {
 
 
 const Detail = () => {
-    const { detailData: data } = useContext(DetailContext);
-
+    const { detailData : data } = useContext(DetailContext);
+    
     return (
         <>
             {
                 data &&
-                <DetailContainer key={`${data.title}-${new Date()}`}>
-                    <DetailHeader title={data.title} location={data.location} />
-
+                <DetailContainer key={`${data.name}-${new Date()}`}>
+                    <DetailHeader name={data.name} address={data.address} />
+                    
                     <DetailContent>
                         <DetailInform>
-                            <DetailGrade grade={data.grade} />
+                            {/* <DetailGrade grade={data.grade} /> */}
                             <DetailDescription description={data.description} />
-                            <DetailPeriod>
+                            {/* <DetailPeriod>
                                 <Calender />
                                 <TimButtonContainer>
                                     <TimeBtns />
                                 </TimButtonContainer>
-                            </DetailPeriod>
-                            <Review />
+                            </DetailPeriod> */}
+                            {/* <Review /> */}
                             <Location />
-                            <DetailCompany company={data.company} />
+                            {/* <DetailCompany company={data.address} /> */}
                         </DetailInform>
-                        <FloatingFormDiv><FloatingForm /></FloatingFormDiv>
+                        {/* <FloatingFormDiv><FloatingForm /></FloatingFormDiv> */}
+                    
                     </DetailContent>
 
                 </DetailContainer>
