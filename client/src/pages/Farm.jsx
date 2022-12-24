@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import FarmFormat from '../components/FarmFormat';
+import FarmInfo from './FarmInfo';
 
 const Subject = styled.h2`
 	text-align: center;
@@ -29,7 +30,8 @@ const FarmManagement = () => {
 	return (
 		<>
 			<FarmFormat>
-				<Subject>농장 정보</Subject>
+				{/* <Subject>농장 정보</Subject> */}
+				<FarmInfo></FarmInfo>
 			</FarmFormat>
 		</>
 	);

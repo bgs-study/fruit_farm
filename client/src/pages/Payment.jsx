@@ -3,7 +3,6 @@ import axios from 'axios';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import styled from 'styled-components';
 import StickyBox from 'react-sticky-box';
-import Modal from '../components/Modal';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Accordion from 'react-bootstrap/Accordion';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -82,23 +81,8 @@ const ReservationInfo = ({ payData }) => {
 
 	useEffect(() => {
 		console.log(payData.period);
-		console.log(1);
-		// console.log(payData.period.start);
 	}, [payData]);
 
-	// console.log(payData.period);
-	// console.log(payData.period[0]);
-	// console.log(payData.period[1]);
-	// const start = payData.period[0];
-	// const end = payData.period[1];
-	// console.log(start);
-	// console.log(end);
-
-	// useEffect(() => {
-	// 	// const [start, end] = payData.period;
-	// 	console.log(payData.period[0]);
-	// 	console.log(payData.period[1]);
-	// }, [startCalenderOpen]);
 	const { times } = payData;
 
 	return (
@@ -336,28 +320,24 @@ const Payment = () => {
 		}
 	};
 
-	const goDetail = () => {
-		navigate('/detail');
-	};
+	// const goDetail = () => {
+	// 	navigate('/detail');
+	// };
 
 	return (
 		<>
-			{payData && data ? (
-				<div style={{ display: 'flex', alignItems: 'flex-start' }}>
-					<Context>
-						<ReservationInfo payData={payData}></ReservationInfo>
-						<SubscriberInfo data={data}></SubscriberInfo>
-						<PaymentInfo></PaymentInfo>
-					</Context>
-					<StickyBox offsetTop={20} offsetBottom={20}>
-						<SideBarDiv>
-							<SideBar payData={payData}></SideBar>
-						</SideBarDiv>
-					</StickyBox>
-				</div>
-			) : (
-				<div>{goDetail()}</div>
-			)}
+			<div style={{ display: 'flex', alignItems: 'flex-start' }}>
+				<Context>
+					<ReservationInfo payData={payData}></ReservationInfo>
+					<SubscriberInfo data={data}></SubscriberInfo>
+					<PaymentInfo></PaymentInfo>
+				</Context>
+				<StickyBox offsetTop={20} offsetBottom={20}>
+					<SideBarDiv>
+						<SideBar payData={payData}></SideBar>
+					</SideBarDiv>
+				</StickyBox>
+			</div>
 		</>
 	);
 };
