@@ -2,30 +2,10 @@ import React, { useEffect, useState } from 'react';
 import CreateFarm from '../components/CreateFarm';
 import EditFarm from '../components/EditFarm';
 import * as userApi from '../lib/userApi';
-// import { createSlice, configureStore } from '@reduxjs/toolkit';
-// import { configureStore } from '@reduxjs/toolkit';
 
-// const initialState = {
-// 	farmData: {},
-// };
-// const farmSlice = createSlice({
-// 	name: 'farmSlice',
-// 	initialState,
-// 	reducers: {
-// 		get(state) {
-// 			state;
-// 		},
-// 		push(state) {},
-// 	},
-// });
-
-function FarmInfo() {
+function MyFarm() {
 	const [farmid, setFarmid] = useState(null);
 	const [farmData, setFarmData] = useState({});
-
-	useEffect(() => {
-		GetFarmData();
-	}, []);
 
 	const GetFarmData = async () => {
 		try {
@@ -41,11 +21,15 @@ function FarmInfo() {
 			console.log(e);
 		}
 	};
+	useEffect(() => {
+		GetFarmData();
+	}, []);
 
+	// memo 혜실: 농장정보를 받아와서 farmid가 없으면 농장등록을 보여주고, 있으면 농장정보를 보여줌
 	return (
 		<>
 			{farmid === null ? (
-				<CreateFarm></CreateFarm>
+				<CreateFarm farmData={farmData}></CreateFarm>
 			) : (
 				<EditFarm farmData={farmData}></EditFarm>
 			)}
@@ -53,4 +37,4 @@ function FarmInfo() {
 	);
 }
 
-export default FarmInfo;
+export default MyFarm;

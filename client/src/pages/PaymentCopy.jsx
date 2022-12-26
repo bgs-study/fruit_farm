@@ -3,13 +3,15 @@ import axios from 'axios';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import styled from 'styled-components';
 import StickyBox from 'react-sticky-box';
-import { useLocation, useNavigate } from 'react-router-dom';
 import Accordion from 'react-bootstrap/Accordion';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ModalContainer from './../components/Modal';
 import { showModal } from '../store/ModalSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import Calender from '../components/ReactCalender';
+import * as userApi from '../lib/userApi';
+
+// Memo 혜실: 상세페이지를 수정 중이라 데이터가 안넘어와서 결제창을 수정할 수 없음, 그래서 카피본을 만들어서 목데이터로 일단 수정중
 
 const Context = styled.div``;
 
@@ -74,28 +76,28 @@ const ModalContent = styled.div`
 	overflow-x: hidden;
 `;
 // 예약정보
-const ReservationInfo = ({ payData }) => {
+const ReservationInfo = ({ data }) => {
 	const modalOpen = useSelector((state) => state.modal.modal);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		console.log(payData.period);
-	}, [payData]);
+		console.log(data.period);
+	}, [data]);
 
-	const { times } = payData;
+	const { times } = data;
 
 	return (
 		<>
-			{payData && (
+			{data && (
 				<>
 					<H1>예약 및 결제</H1>
 					<H2>예약 정보</H2>
 					<H3>날짜</H3>
-					<Info>{payData.date}</Info>
+					<Info>{data.date}</Info>
 					<H3>시간</H3>
-					<Info>{payData.time}</Info>
+					<Info>{data.time}</Info>
 					<H3>인원</H3>
-					<Info>{payData.headCount}</Info>
+					<Info>{data.headCount}</Info>
 					<Button onClick={() => dispatch(showModal())}>예약정보수정</Button>
 
 					{modalOpen && (
@@ -107,8 +109,8 @@ const ReservationInfo = ({ payData }) => {
 								<ModalContent>
 									<Calender
 										period={{
-											start: payData.period.start,
-											end: payData.period.end,
+											start: data.period.start,
+											end: data.period.end,
 										}}
 										update
 									/>
@@ -119,19 +121,17 @@ const ReservationInfo = ({ payData }) => {
 											</option>
 										))}
 									</Select>
-									<select>
+									<Select>
 										{[...Array(10).keys()].map((n) => (
 											<option key={`HeadCount-${n + 1}`} value={n + 1}>
 												{n + 1}
 											</option>
 										))}
-									</select>
+									</Select>
 								</ModalContent>
 							</ModalLayout>
 						</ModalContainer>
 					)}
-					{/* <TimeBtns></TimeBtns> */}
-					{/* {isEdit ? <ReactCalender></ReactCalender> : null} */}
 					<Line />
 				</>
 			)}
@@ -140,19 +140,18 @@ const ReservationInfo = ({ payData }) => {
 };
 
 //SideBar
-const SideBar = ({ payData }) => {
-	const { farm, programName, price, headCount, totalPrice } = payData;
+const SideBar = ({ data }) => {
+	const { farm, price, headCount, totalPrice } = data;
 
 	return (
 		<>
-			{payData && (
+			{data && (
 				<div>
 					<PayboxTop>
-						{/* img 데이터 받기 */}
+						{/* memo 혜실 : img 데이터 받기 구현 예정 */}
 						<Image></Image>
 						<PayboxName>
 							<NameInfo>{farm}</NameInfo>
-							<NameInfo>{programName}</NameInfo>
 						</PayboxName>
 					</PayboxTop>
 					<H3>요금 세부정보</H3>
@@ -169,21 +168,21 @@ const SideBar = ({ payData }) => {
 		</>
 	);
 };
-
+// Memo 혜실 : 받은 유저 정보 렌더링
 // 예약자 정보
-const SubscriberInfo = ({ data }) => {
+const SubscriberInfo = ({ userData }) => {
 	const [nameOpen, setNameOpen] = useState(false);
-	const [name, setName] = useState(data.name);
+	const [name, setName] = useState('');
 	const [phoneNumberOpen, setPhoneNumberOpen] = useState(false);
-	const [phoneNumber, setPhoneNumber] = useState(data.phoneNumber);
+	const [phoneNumber, setPhoneNumber] = useState('');
 	const [emailOpen, setEmailOpen] = useState(false);
-	const [email, setEmail] = useState(data.email);
+	const [email, setEmail] = useState('');
 
 	useEffect(() => {
-		setName(data.name);
-		setPhoneNumber(data.phoneNumber);
-		setEmail(data.email);
-	}, [data]);
+		setName(userData.name);
+		setPhoneNumber(userData.phoneNum);
+		setEmail(userData.email);
+	}, [userData]);
 
 	return (
 		<>
@@ -250,10 +249,6 @@ const PaymentInfo = () => {
 	return (
 		<>
 			<H3>결제 수단</H3>
-			<Select name="cardOption">
-				<Option value="card">카드결제</Option>
-				<Option value="transfer">계좌이체</Option>
-			</Select>
 			<Accordion>
 				<Accordion.Item eventKey="0">
 					<Accordion.Header>
@@ -288,24 +283,21 @@ const PaymentInfo = () => {
 			</Accordion>
 			<Line />
 			<P>주문 내용을 확인하였으며, 위 내용에 동의합니다.</P>
-			<Button>확인 및 결제</Button>
 		</>
 	);
 };
 
-const Payment = () => {
-	const location = useLocation();
-	const navigate = useNavigate();
-	const [payData, setPayData] = useState({});
+function Payment() {
 	const [data, setData] = useState({});
+	const [userData, setUserData] = useState({});
+	const [Selected, setSelected] = useState('card');
 
-	useEffect(() => {
-		console.log(location.state);
-		setPayData(location.state);
-	}, []);
-
+	const optionHandle = (e) => {
+		setSelected(e.target.value);
+	};
 	useEffect(() => {
 		getData();
+		getUserData();
 	}, []);
 
 	const getData = async () => {
@@ -318,27 +310,67 @@ const Payment = () => {
 			console.log(e);
 		}
 	};
+	// Memo 혜실: user정보 받아오기
+	const getUserData = async () => {
+		try {
+			const res = await userApi.get('//localhost:3500/api/myInfo');
+			const userData = await res.data;
+			console.log(userData);
+			setUserData({
+				name: userData.name,
+				phoneNum: userData.phoneNum,
+				email: userData.email,
+			});
+		} catch (e) {
+			console.log(e);
+		}
+	};
 
-	// const goDetail = () => {
-	// 	navigate('/detail');
-	// };
+	const postData = async (e) => {
+		try {
+			const reserData = await userApi.post(
+				'http://localhost:3500/api/reserve',
+				{
+					total_price: data.totalPrice,
+					payment: Selected,
+					name: userData.name,
+					phoneNum: userData.phoneNum,
+					email: userData.email,
+					personnel: data.headCount,
+					time_id: '4',
+				},
+			);
+			console.log(reserData);
+		} catch (e) {
+			console.log(e);
+		}
+	};
 
 	return (
 		<>
 			<div style={{ display: 'flex', alignItems: 'flex-start' }}>
 				<Context>
-					<ReservationInfo payData={payData}></ReservationInfo>
-					<SubscriberInfo data={data}></SubscriberInfo>
-					<PaymentInfo></PaymentInfo>
+					<ReservationInfo data={data}></ReservationInfo>
+					<SubscriberInfo userData={userData}></SubscriberInfo>
+					<Select>
+						<option value="card" key={1}>
+							카드결제
+						</option>
+						<option value="transfer" key={2}>
+							계좌이체
+						</option>
+					</Select>
+					<PaymentInfo option={optionHandle}></PaymentInfo>
+					<Button onClick={postData}>확인 및 결제</Button>
 				</Context>
 				<StickyBox offsetTop={20} offsetBottom={20}>
 					<SideBarDiv>
-						<SideBar payData={payData}></SideBar>
+						<SideBar data={data}></SideBar>
 					</SideBarDiv>
 				</StickyBox>
 			</div>
 		</>
 	);
-};
+}
 
 export default Payment;
