@@ -83,7 +83,12 @@ function FarmNullInputForm() {
 				console.log(el);
 			});
 			console.log(Array.isArray(uploadFile));
-			console.log(formData);
+			for (const key of formData.keys()) {
+				console.log(key);
+			}
+			for (const value of formData.values()) {
+				console.log(value);
+			}
 			const res = await axios(`http://localhost:3500/api/farms`, {
 				method: 'POST',
 				data: formData,

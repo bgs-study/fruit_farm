@@ -13,16 +13,12 @@ import MyReview from './pages/MyReview';
 import MyReservation from './pages/MyReservation';
 import CreateReviewPage from './pages/CreateReviewPage';
 import UpdateReviewPage from './pages/UpdateReviewPage';
-
 import Farm from './pages/Farm';
 import FarmReservation from './pages/FarmReservation';
 import FarmTimeTable from './pages/FarmTimeTable';
 import Favorite from './pages/Favorite';
 import FarmReview from './pages/FarmReview';
-
 import NotFound from './pages/NotFound';
-
-import PaymentCopy from './pages/PaymentCopy';
 
 // memo 지우: NonMemberRoute -> 비회원일 때만 페이지 전환
 // MemberRoute -> 일반 회원일 때만 페이지 전화
@@ -60,7 +56,7 @@ function App() {
 						path="/pay"
 						element={
 							<MemberRoute>
-								<PaymentCopy />
+								<Payment />
 							</MemberRoute>
 						}
 					/>
