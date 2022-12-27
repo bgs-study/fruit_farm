@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import * as API from '../lib/userApi';
-import { useNavigate } from 'react-router';
+import { HOST } from './../global-variables';
 
 const Title = styled.h1``;
 const Line = styled.div`
@@ -15,11 +15,18 @@ const Content = styled.div``;
 
 const Button = styled.button``;
 
+const Img = styled.img`
+	width: 200px;
+	+ img {
+		margin-left: 5px;
+	}
+`;
+
 const ShowFarm = ({ farmData }) => {
-	const navigate = useNavigate();
+	const imgs = farmData.url.split(',');
 
 	const onClickDel = async () => {
-		await API.delete(`//localhost:3500/api/farms/${farmData.id}`);
+		await API.delete(`${HOST}/api/farms/${farmData.id}`);
 		alert('농장이 삭제되었습니다.');
 		window.location.reload();
 	};
@@ -46,6 +53,12 @@ const ShowFarm = ({ farmData }) => {
 			<Line>
 				<Lable>체험 설명</Lable>
 				<Content>{farmData.description}</Content>
+			</Line>
+			<Line>
+				<Lable>이미지</Lable>
+				{imgs[0] && <Img src={imgs[0]} alt="이미지 불러오기 실패" />}
+				{imgs[1] && <Img src={imgs[1]} alt="이미지 불러오기 실패" />}
+				{imgs[2] && <Img src={imgs[2]} alt="이미지 불러오기 실패" />}
 			</Line>
 			<Line>
 				<Link to="/farm/edit">

@@ -6,6 +6,8 @@ import * as userApi from '../lib/userApi';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { loginformSchema } from '../hooks/useForm';
+import { SubmitButton, Input } from '../styles/Styled';
+import { HOST } from './../global-variables';
 
 const LoginWrapper = styled.div`
 	padding: 10%;
@@ -15,14 +17,23 @@ const Title = styled.h1`
 	text-align: center;
 	font-size: 2rem;
 	font-weight: bold;
+	position: relative;
+	margin-bottom: 2%;
 `;
 
 const InputForm = styled.form`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	align-items: center;
+	margin: 40px auto;
+	width: 320px;
+`;
+
+const InputWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
 	align-items: end;
-	margin: 0 auto;
 `;
 
 const InputFormLine = styled.div`
@@ -31,12 +42,20 @@ const InputFormLine = styled.div`
 
 const Label = styled.label``;
 
-const Input = styled.input``;
+const LoginInput = styled(Input)`
+	margin-left: 5px;
+	width: 250px;
+`;
 
-const ButtonWrapper = styled.div``;
+const ButtonWrapper = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`;
 
-const Button = styled.button`
-	width: 10rem;
+const SubmitBtn = styled(SubmitButton)`
+	width: 150px;
+	height: 40px;
 `;
 
 const Line = styled.div`
@@ -44,7 +63,7 @@ const Line = styled.div`
 	display: block;
 	width: 100%;
 	height: 0.5px;
-	background-color: gray;
+	background-color: #b1b0ac;
 	margin: 5% 0;
 `;
 
@@ -59,7 +78,7 @@ function Login() {
 
 	const loginUser = async (data) => {
 		try {
-			const res = await userApi.post('//localhost:3500/api/login', data);
+			const res = await userApi.post(`${HOST}/api/login`, data);
 			const token = res.data.token;
 
 			localStorage.setItem('token', token);
@@ -74,10 +93,7 @@ function Login() {
 
 	const loginFarmer = async (data) => {
 		try {
-			const res = await userApi.post(
-				'//localhost:3500/api/farmers/login',
-				data,
-			);
+			const res = await userApi.post(`${HOST}/api/farmers/login`, data);
 			const token = res.data.token;
 
 			localStorage.setItem('token', token);
@@ -95,40 +111,42 @@ function Login() {
 		<LoginWrapper>
 			<Title>로그인</Title>
 			<InputForm>
-				<InputFormLine>
-					<Label htmlFor="email">이메일</Label>
-					<Input id="email" type="email" {...register('email')} />
-				</InputFormLine>
-				{errors.email && <small role="alert">{errors.email.message}</small>}
-				<InputFormLine>
-					<Label htmlFor="password">비밀번호</Label>
-					<Input
-						id="password"
-						type="password"
-						placeholder="영문, 숫자, 특수문자 조합 최소 8자"
-						{...register('password')}
-					/>
-				</InputFormLine>
-				{errors.password && (
-					<small role="alert">{errors.password.message}</small>
-				)}
+				<InputWrapper>
+					<InputFormLine>
+						<Label htmlFor="email">이메일</Label>
+						<LoginInput id="email" type="email" {...register('email')} />
+					</InputFormLine>
+					{errors.email && <small role="alert">{errors.email.message}</small>}
+					<InputFormLine>
+						<Label htmlFor="password">비밀번호</Label>
+						<LoginInput
+							id="password"
+							type="password"
+							placeholder="영문, 숫자, 특수문자 조합 최소 8자"
+							{...register('password')}
+						/>
+					</InputFormLine>
+					{errors.password && (
+						<small role="alert">{errors.password.message}</small>
+					)}
+				</InputWrapper>
+				<ButtonWrapper>
+					<SubmitBtn
+						type="submit"
+						disabled={isSubmitting}
+						onClick={handleSubmit((data) => loginUser(data))}
+					>
+						일반 회원 로그인
+					</SubmitBtn>
+					<SubmitBtn
+						type="submit"
+						disabled={isSubmitting}
+						onClick={handleSubmit((data) => loginFarmer(data))}
+					>
+						농장주 로그인
+					</SubmitBtn>
+				</ButtonWrapper>
 			</InputForm>
-			<ButtonWrapper>
-				<Button
-					type="submit"
-					disabled={isSubmitting}
-					onClick={handleSubmit((data) => loginUser(data))}
-				>
-					일반 회원 로그인
-				</Button>
-				<Button
-					type="submit"
-					disabled={isSubmitting}
-					onClick={handleSubmit((data) => loginFarmer(data))}
-				>
-					농장주 로그인
-				</Button>
-			</ButtonWrapper>
 			<Line />
 			<Link to="/register">회원가입하기</Link>
 		</LoginWrapper>

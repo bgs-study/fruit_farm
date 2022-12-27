@@ -5,6 +5,7 @@ import * as API from '../lib/userApi';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 import FindAddress from '../components/FindAddress';
+import { HOST } from './../global-variables';
 
 const Tittle = styled.h1``;
 
@@ -30,108 +31,108 @@ const EditFarm = () => {
 	const [detailaddress, setDetailAddress] = useState('');
 	const [description, setDescription] = useState('');
 	const [owner, setOwner] = useState('');
-	const [imgs, setImgs] = useState(null);
+	const [imgs, setImgs] = useState('');
 	const [farmId, setFarmId] = useState(null);
 
 	// memo 지우: 초기 렌더링시 데이터 받아와서 상태값 설정 -> input value에 넣기
-	const fetchData = async () => {
+	async function fetchData() {
+		let farmId;
 		try {
-			await API.get('http://localhost:3500/api/farmers/farmInfo').then(
-				(res) => {
-					if (res.data.farmInfo !== null) {
-						setFarmData(res.data);
-						setType(res.data.type);
-						setName(res.data.name);
-						setAddress(res.data.address);
-						setDescription(res.data.description);
-						setOwner(res.data.owner);
-						setFarmId(res.data.id);
-					}
-				},
-			);
+			await API.get(`${HOST}/api/farms/farminformation`).then((res) => {
+				if (res.data.farmInfo !== null) {
+					const farmInfo = res.data.farmInfo;
+					setFarmData(farmInfo);
+					setType(farmInfo.type);
+					setName(farmInfo.name);
+					setAddress(farmInfo.address);
+					setDescription(farmInfo.description);
+					setOwner(farmInfo.owner);
+					setFarmId(farmInfo.id);
+				}
+			});
 		} catch (e) {
+			alert('농장 정보를 불러올 수 없습니다.');
 			console.error(e.response.data.message);
 		}
-	};
+	}
 
+	// memo 지우: 이미지 파일 선택 -> 이미지 정보가 담긴 배열이 상태에 저장됨
 	const onChangeImg = (e) => {
 		e.preventDefault();
 
 		if (e.target.files) {
 			const imgArr = e.target.files;
-			const formData = new FormData();
-			Array.from(imgArr).forEach((img) => {
-				formData.append('file', img);
-			});
-			setImgs(formData);
-			// setImgs(imgArr);
+			if (imgArr.length > 3) {
+				alert('이미지는 3개까지 등록 가능합니다.');
+				e.target.value = '';
+			} else setImgs(imgArr);
 		}
 	};
 
 	// memo 지우: 수정 버튼
 	const onClickModify = async () => {
-		// const formData = new FormData();
-		// formData.append('type', type);
-		// formData.append('name', name);
-		// formData.append('address', `${address} ${detailaddress}`);
-		// formData.append('description', description);
-		// formData.append('owner', owner);
-		// Array.from(imgArr).forEach((img) => {
-		// 	formData.append('file', img);
-		// });
+		// memo 지우: 이미지파일을 formData로 전달하기 위해 모든 input값도 넣어줌
+		const formData = new FormData();
+		formData.append('type', type);
+		formData.append('name', name);
+		formData.append('address', `${address}${detailaddress}`);
+		formData.append('description', description);
+		formData.append('owner', owner);
+		if (imgs) {
+			Array.from(imgs).forEach((img) => {
+				formData.append('file', img);
+			});
+		}
 
-		const inputData = {
-			type,
-			name,
-			address: `${address} ${detailaddress}`,
-			description,
-			owner,
-			formData: imgs,
-		};
-		console.log('들어가는 데이터', inputData);
 		try {
-			let res = await axios(`//localhost:3500/api/farms/${farmId}`, {
-				method: 'PUT',
+			await axios(`${HOST}/api/farms/${farmId}`, {
+				method: 'PATCH',
 				headers: {
-					'Content-Type': 'application/json',
+					'Content-Type': 'multipart/form-data',
 					Authorization: `Bearer ${localStorage.getItem('token')}`,
 				},
-				data: inputData,
+				data: formData,
 			});
 			alert('수정되었습니다.');
-			console.log('요청 결과', res);
 			navigate('/farm');
 		} catch (e) {
+			alert('수정에 실패했습니다.');
 			console.log(e.response.data.message);
 		}
 	};
 
 	// memo 지우: 등록 완료 버튼
 	const onClickRegistration = async () => {
-		const inputData = {
-			type,
-			name,
-			address: `${address} ${detailaddress}`,
-			description,
-			owner,
-			formData: imgs,
-		};
+		const formData = new FormData();
 
-		console.log('들어가는 데이터', inputData);
-		try {
-			let res = await axios(`//localhost:3500/api/farms`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'multipart/form-data',
-					Authorization: `Bearer ${localStorage.getItem('token')}`,
-				},
-				data: inputData,
+		// memo 지우: 데이터를 모두 넣어야지 완료될 수 있음
+		if (type && name && address && description && owner && imgs) {
+			formData.append('type', type);
+			formData.append('name', name);
+			formData.append('address', `${address}${detailaddress}`);
+			formData.append('description', description);
+			formData.append('owner', owner);
+			Array.from(imgs).forEach((img) => {
+				formData.append('file', img);
 			});
-			alert('등록되었습니다.');
-			console.log('요청 결과', res);
-			navigate('/farm');
-		} catch (e) {
-			console.log(e.response.data.message);
+
+			try {
+				await axios(`${HOST}/api/farms`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'multipart/form-data',
+						Authorization: `Bearer ${localStorage.getItem('token')}`,
+					},
+					data: formData,
+				});
+				alert('등록되었습니다.');
+				navigate('/farm');
+			} catch (e) {
+				alert('등록에 실패했습니다.');
+				console.log(e);
+			}
+		} else {
+			alert('정보를 모두 입력해주세요.');
 		}
 	};
 
