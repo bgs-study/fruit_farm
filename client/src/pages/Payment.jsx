@@ -57,10 +57,8 @@ const PayboxName = styled.div`
 // 예약정보
 const ReservationInfo = ({ payData }) => {
 	const navigate = useNavigate();
-	const { date, startTime, endTime, headCount } = payData;
 	const goDetail = () => {
-		// memo 혜실: farmid 들어갈자리
-		navigate(`/detail`);
+		navigate(-1);
 	};
 
 	return (
@@ -70,13 +68,13 @@ const ReservationInfo = ({ payData }) => {
 					<H1>예약 및 결제</H1>
 					<H2>예약 정보</H2>
 					<H3>날짜</H3>
-					<Info>{date}</Info>
+					<Info>{payData.date}</Info>
 					<H3>시간</H3>
 					<Info>
-						{startTime} ~ {endTime}
+						{payData.startTime} ~ {payData.endTime}
 					</Info>
 					<H3>인원</H3>
-					<Info>{headCount}</Info>
+					<Info>{payData.headCount}</Info>
 					<Button onClick={goDetail}>예약정보수정</Button>
 					<Line />
 				</>
@@ -170,15 +168,18 @@ const Payment = () => {
 	const [phoneNumber, setPhoneNumber] = useState(userData.phoneNum);
 	const [emailOpen, setEmailOpen] = useState(false);
 	const [email, setEmail] = useState(userData.email);
-	const [disabled, setDisabled] = useState(false);
+	const [resData, setResData] = useState([]);
+	const [personnel, setPersonnel] = useState(0);
+	const [pay, setPay] = useState(false);
 
 	useEffect(() => {
 		setPayData(location.state);
+		getUserData();
 	}, []);
 
 	useEffect(() => {
-		getUserData();
-	}, []);
+		window.scrollTo(0, 0);
+	}, [payData]);
 
 	const getUserData = async () => {
 		try {
@@ -193,13 +194,11 @@ const Payment = () => {
 			console.log(e);
 		}
 	};
+
 	const submitHandler = async () => {
-		setDisabled(true);
-		dispatch(showModal());
-		await new Promise((r) => setTimeout(r, 1000));
-		postData();
-		setDisabled(false);
+		getReserveData();
 	};
+
 	const postData = async (e) => {
 		try {
 			const reserData = await userApi.post(
@@ -211,10 +210,35 @@ const Payment = () => {
 					phoneNum: phoneNumber,
 					email: email,
 					personnel: payData.headCount,
-					time_id: payData.id,
+					time_id: payData.timeId,
 				},
 			);
-			console.log(reserData);
+		} catch (e) {
+			console.log(e);
+		}
+	};
+	useEffect(() => {
+		if (payData.headCount <= personnel) {
+			postData();
+			setPay(true);
+			dispatch(showModal());
+		} else if (payData.headCount > personnel) {
+			dispatch(showModal());
+		}
+	}, [resData]);
+
+	const getReserveData = async () => {
+		try {
+			const res = await userApi.get(
+				`http://localhost:3500/api/timetables/${payData.farmId}`,
+			);
+			const resData = await res.data;
+			setResData(resData);
+			for (let i = 0; i < resData.length; i++) {
+				if (resData[i].id === payData.timeId) {
+					setPersonnel(resData[i].personnel);
+				}
+			}
 		} catch (e) {
 			console.log(e);
 		}
@@ -229,10 +253,6 @@ const Payment = () => {
 		setPhoneNumber(userData.phoneNum);
 		setEmail(userData.email);
 	}, [userData]);
-
-	const showReserve = () => {
-		navigate(`/myreservation`);
-	};
 
 	return (
 		<>
@@ -302,9 +322,7 @@ const Payment = () => {
 						</Option>
 					</Select>
 					<PaymentInfo></PaymentInfo>
-					<Button onClick={submitHandler} disabled={disabled}>
-						확인 및 결제
-					</Button>
+					<Button onClick={submitHandler}>확인 및 결제</Button>
 				</Context>
 				<StickyBox offsetTop={20} offsetBottom={20}>
 					<SideBarDiv>
@@ -313,12 +331,41 @@ const Payment = () => {
 				</StickyBox>
 				{modalOpen && (
 					<ModalContainer>
-						<H1>결제완료</H1>
-						<Button onClick={() => dispatch(closeModal())}>확인</Button>
-						<Button onClick={() => {
-							dispatch(closeModal())
-							navigate(`/myreservation`);
-						}}>구매내역보기</Button>
+						{pay ? (
+							<div>
+								<H1>결제완료</H1>
+								<Button
+									onClick={() => {
+										dispatch(closeModal());
+										navigate(`/`);
+									}}
+								>
+									확인
+								</Button>
+								<Button
+									onClick={() => {
+										dispatch(closeModal());
+										navigate(`/myreservation`);
+									}}
+								>
+									구매내역보기
+								</Button>
+							</div>
+						) : (
+							<div>
+								<H1>결제실패</H1>
+								<P>체험 인원 초과로 예약이 실패되었습니다</P>
+								<P>다른 시간대로 예약해주세요</P>
+								<Button
+									onClick={() => {
+										dispatch(closeModal());
+										navigate(-1);
+									}}
+								>
+									확인
+								</Button>
+							</div>
+						)}
 					</ModalContainer>
 				)}
 			</div>
