@@ -1,48 +1,34 @@
 import React, { useState } from 'react';
-import FarmNullInputForm from './FarmNullInputForm';
-import FarmForm from './FarmForm';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+
+const Wrapper = styled.div`
+	margin-top: 10%;
+	width: 100%;
+`;
+
+const Div = styled.div`
+	text-align: center;
+	margin-bottom: 5%;
+`;
 
 const Button = styled.button``;
 
-function CreateFarm({ farmData }) {
-	const [isAddFarm, setIsAddFarm] = useState(false);
-	const [saveInfo, setSaveInfo] = useState(false);
-
-	const NullFarm = () => {
-		return (
-			<>
-				<p>
-					농장이 없습니다.
-					<br />
-					새로 등록해주세요.
-				</p>
-				<button onClick={() => onAddFarm()}>등록하기</button>
-			</>
-		);
-	};
-	const onAddFarm = () => {
-		setIsAddFarm(true);
-	};
-	//memo 혜실 : 등록하기 버튼을 누르면 빈 농장등록 폼이 나오고, 등록하면 농장 내용을 볼 수 있음
+const CreateFarm = ({ farmData }) => {
 	return (
-		<>
-			{isAddFarm ? (
-				<div>
-					{saveInfo ? (
-						<div>
-							<FarmForm farmData={farmData}></FarmForm>
-							<Button>수정</Button>
-						</div>
-					) : (
-						<FarmNullInputForm />
-					)}
-				</div>
-			) : (
-				<NullFarm></NullFarm>
-			)}
-		</>
+		<Wrapper>
+			<Div>
+				농장이 없습니다.
+				<br />
+				새로 등록해주세요.
+			</Div>
+			<Div>
+				<Link to="/farm/edit">
+					<Button>등록하기</Button>
+				</Link>
+			</Div>
+		</Wrapper>
 	);
-}
+};
 
 export default CreateFarm;

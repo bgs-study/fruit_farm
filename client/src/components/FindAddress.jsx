@@ -9,12 +9,12 @@ const Input = styled.input`
 	width: 500px;
 `;
 
-const Post = (props) => {
-	const [totalAddress, setTotalAddress] = useState('');
+const FindAddress = ({ name, setAddress, setDetailAddress }) => {
 	const modalOpen = useSelector((state) => state.modal.modal);
 	const dispatch = useDispatch();
+	const [openDetailAddress, setOpenDetailAddress] = useState(false);
 
-	const complete = (data) => {
+	const onClickComplete = (data) => {
 		let fullAddress = data.address;
 		let extraAddress = '';
 
@@ -28,16 +28,9 @@ const Post = (props) => {
 			}
 			fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
 		}
-		// console.log('data', data);
-		console.log('fullAddress', fullAddress);
-		console.log('data.zonecode', data.zonecode);
-		setTotalAddress(fullAddress);
-		dispatch(closeModal());
 
-		// props.setcompany({
-		// 	...props.company,
-		// 	address: fullAddress,
-		// });
+		setAddress(fullAddress);
+		dispatch(closeModal());
 	};
 
 	return (
@@ -48,15 +41,33 @@ const Post = (props) => {
 						<DaumPostcode
 							className="postmodal"
 							autoClose
-							onComplete={complete}
+							onComplete={onClickComplete}
 						/>
 					</ModalContainer>
 				</div>
 			)}
-			<Input type="text" value={totalAddress} readOnly />
-			<button onClick={() => dispatch(showModal())}>주소검색</button>
+			<Input value={name} type="text" readOnly />
+			{openDetailAddress && (
+				<Input
+					type="text"
+					name="detailAddress"
+					placeholder="상세주소를 입력해주세요"
+					onChange={(e) => {
+						setDetailAddress(e.target.value);
+					}}
+				></Input>
+			)}
+			<button
+				type="button"
+				onClick={() => {
+					dispatch(showModal());
+					setOpenDetailAddress(true);
+				}}
+			>
+				주소검색
+			</button>
 		</>
 	);
 };
 
-export default Post;
+export default FindAddress;

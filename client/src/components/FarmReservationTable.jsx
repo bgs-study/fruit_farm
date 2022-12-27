@@ -54,7 +54,7 @@ const FailAnnouncement = styled.p`
 const FarmReservationTable = ({}) => {
 	// memo 지우: 데이터 보관
 	const [originalData, setOriginalData] = useState(null);
-	const [printData, setPrintData] = useState(null);
+	const [filteredData, setFilteredData] = useState(null);
 	// memo 지우: 예약상태 관리
 	const statusList = ['전체', '예약대기', '예약완료', '예약취소', '체험완료'];
 	const [statusOption, setStatusOption] = useState('전체');
@@ -68,6 +68,7 @@ const FarmReservationTable = ({}) => {
 		try {
 			await API.get('//localhost:3500/api/reserve/farmer').then((res) => {
 				setOriginalData(res.data);
+				setFilteredData(res.data);
 			});
 		} catch (e) {
 			console.log(e.response.data.message);
@@ -84,7 +85,6 @@ const FarmReservationTable = ({}) => {
 				(obj) => obj.reserve.status === statusOption,
 			);
 		}
-
 		// memo 지우: 최근순 or 오래된순으로 정렬
 		if (dateOption === '최근순') {
 			filteredData.sort((a, b) => {
@@ -94,7 +94,7 @@ const FarmReservationTable = ({}) => {
 				if (aTime == bTime) return 0;
 				if (aTime < bTime) return 1;
 			});
-		} else {
+		} else if (dateOption === '오래된순') {
 			filteredData.sort((a, b) => {
 				let aTime = a.reserve.createdAt;
 				let bTime = b.reserve.createdAt;
@@ -103,7 +103,7 @@ const FarmReservationTable = ({}) => {
 				if (aTime < bTime) return -1;
 			});
 		}
-		setPrintData(filteredData);
+		setFilteredData(filteredData);
 		setPage(1);
 	};
 
@@ -142,12 +142,12 @@ const FarmReservationTable = ({}) => {
 		fetchData();
 	}, []);
 
-	// memo 지우: 원본 데이터 or 필터 업그레이드 -> filterData 통해 필터링, printData에 결과 저장 -> 화면 재렌더링
+	// memo 지우: 원본 데이터 or 필터 업그레이드 -> filterData 통해 필터링, filteredData에 결과 저장 -> 화면 재렌더링
 	useEffect(() => {
 		if (originalData) filterData();
-	}, [originalData, statusOption, dateOption]);
+	}, [statusOption, dateOption]);
 
-	if (printData) {
+	if (filteredData) {
 		return (
 			<>
 				<FilterWrapper>
@@ -173,7 +173,7 @@ const FarmReservationTable = ({}) => {
 						</Tr>
 					</Thead>
 					<tbody>
-						{printData.slice(offset, offset + 10).map((oneReservation) => {
+						{filteredData.slice(offset, offset + 10).map((oneReservation) => {
 							const { time, reserve } = oneReservation;
 							return (
 								<Tr key={reserve.id}>
@@ -196,6 +196,7 @@ const FarmReservationTable = ({}) => {
 									<Td>
 										{reserve.total_price.toLocaleString('ko-KR')}원<br />
 										{reserve.payment === 'card' && '카드결제'}
+										{reserve.payment === 'transfer' && '계좌이체'}
 									</Td>
 									<BtnTd>
 										{reserve.status}
@@ -223,7 +224,7 @@ const FarmReservationTable = ({}) => {
 					</tbody>
 				</Table>
 				<Pagination
-					total={printData.length}
+					total={filteredData.length}
 					limit={10}
 					page={page}
 					setPage={setPage}

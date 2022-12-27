@@ -2,8 +2,8 @@ import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Layout from './pages/Layout';
 import Home from './pages/Home';
-import Login from './pages/login';
-import Register from './pages/register';
+import Login from './pages/Login';
+import Register from './pages/Register';
 
 import DetailPage from './pages/DetailPage';
 import Payment from './pages/Payment';
@@ -14,6 +14,7 @@ import MyReservation from './pages/MyReservation';
 import CreateReviewPage from './pages/CreateReviewPage';
 import UpdateReviewPage from './pages/UpdateReviewPage';
 import Farm from './pages/Farm';
+import EditFarm from './pages/EditFarm';
 import FarmReservation from './pages/FarmReservation';
 import FarmTimeTable from './pages/FarmTimeTable';
 import Favorite from './pages/Favorite';
@@ -114,6 +115,14 @@ function App() {
 						element={
 							<FarmerRoute>
 								<Farm />
+							</FarmerRoute>
+						}
+					/>
+					<Route
+						path="/farm/edit"
+						element={
+							<FarmerRoute>
+								<EditFarm />
 							</FarmerRoute>
 						}
 					/>
