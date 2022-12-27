@@ -31,9 +31,7 @@ const EditFarm = () => {
 	const [description, setDescription] = useState('');
 	const [owner, setOwner] = useState('');
 	const [imgs, setImgs] = useState(null);
-	const [disabled, setDisabled] = useState(false);
 	const [farmId, setFarmId] = useState(null);
-	const [issettingAddress, setIssettingAddress] = useState(false);
 
 	// memo 지우: 초기 렌더링시 데이터 받아와서 상태값 설정 -> input value에 넣기
 	const fetchData = async () => {
@@ -66,15 +64,22 @@ const EditFarm = () => {
 				formData.append('file', img);
 			});
 			setImgs(formData);
+			// setImgs(imgArr);
 		}
-	};
-
-	const onClickAddress = () => {
-		// findAddress();
 	};
 
 	// memo 지우: 수정 버튼
 	const onClickModify = async () => {
+		// const formData = new FormData();
+		// formData.append('type', type);
+		// formData.append('name', name);
+		// formData.append('address', `${address} ${detailaddress}`);
+		// formData.append('description', description);
+		// formData.append('owner', owner);
+		// Array.from(imgArr).forEach((img) => {
+		// 	formData.append('file', img);
+		// });
+
 		const inputData = {
 			type,
 			name,

@@ -21,8 +21,8 @@ const InputForm = styled.form`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	align-items: center;
-	margin: 10% 0;
+	align-items: end;
+	margin: 0 auto;
 `;
 
 const InputFormLine = styled.div`
@@ -32,6 +32,8 @@ const InputFormLine = styled.div`
 const Label = styled.label``;
 
 const Input = styled.input``;
+
+const ButtonWrapper = styled.div``;
 
 const Button = styled.button`
 	width: 10rem;
@@ -44,16 +46,6 @@ const Line = styled.div`
 	height: 0.5px;
 	background-color: gray;
 	margin: 5% 0;
-`;
-
-const SocialLogin = styled.div`
-	display: flex;
-	justify-content: center;
-`;
-const SocialButton = styled.button`
-	+ button {
-		margin-left: 1rem;
-	}
 `;
 
 function Login() {
@@ -120,6 +112,8 @@ function Login() {
 				{errors.password && (
 					<small role="alert">{errors.password.message}</small>
 				)}
+			</InputForm>
+			<ButtonWrapper>
 				<Button
 					type="submit"
 					disabled={isSubmitting}
@@ -134,13 +128,9 @@ function Login() {
 				>
 					농장주 로그인
 				</Button>
-			</InputForm>
-			<Link to="/register">회원가입하기</Link>
+			</ButtonWrapper>
 			<Line />
-			<SocialLogin>
-				<SocialButton>카카오</SocialButton>
-				<SocialButton>구글</SocialButton>
-			</SocialLogin>
+			<Link to="/register">회원가입하기</Link>
 		</LoginWrapper>
 	);
 }
