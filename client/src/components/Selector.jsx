@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 
 import {Link} from 'react-router-dom';
@@ -13,7 +13,8 @@ const Selector = React.memo(({searchType, temp, setTemp, setOptions}) => {
 
   const dispatch = useDispatch();
   const option = useSelector(state=>state.option);
-  
+  const [cat, setCat] = useState([]);
+
   useEffect(()=>{
     console.log(option);
   }, [option])
@@ -23,10 +24,25 @@ const Selector = React.memo(({searchType, temp, setTemp, setOptions}) => {
       ...temp,
       [searchType]: e.target.id
     });
-
-    
     setOptions(temp);
   };
+
+  useEffect(()=>{
+    getFruits();
+  }, []);
+
+  const getFruits = async () => {
+    await axios.get('http://localhost:3500/api/farms?limit=100000000')
+    .then(res=>res.data)
+    .then(data=>{
+      const cat = [];
+      data.map(x=>{
+        if (!cat.includes(x.type)) cat.push(x.type);
+      })
+      console.log(cat);
+      setCat(cat);
+    });
+  }
 
   return (
     searchType === "location" && (
@@ -40,11 +56,11 @@ const Selector = React.memo(({searchType, temp, setTemp, setOptions}) => {
       </Container>
     ) || searchType === "fruit" && (
       <Container>
-        {produces.map((x, i)=>(
+        {cat.map((x, i)=>(
           <Item to="/" key={i} id={x} onClick={e=>{
             dispatch(setFruit(e.target.id));
             dispatch(setLocation(null));
-          }}>{produces[i]}</Item>
+          }}>{cat[i]}</Item>
         ))}
       </Container>
     )
@@ -70,21 +86,6 @@ const location = [
   ["제주", '제주', 'Jeju'],
 ];
 
-const produces = [
-  '감자',
-  '딸기',
-  '복숭아',
-  '감',
-  '수박',
-  '대추',
-  '호박',
-  '사과',
-  '포도',
-  '귤',
-  '당근',
-  '참외'
-];
-
 //
 const Container = styled.div`
   display: grid;
@@ -102,15 +103,21 @@ const Container = styled.div`
 
 const Item = styled(Link)`
   padding: 10px 0px;
+  height: 60px;
   border-bottom: 1px solid #c3c2c2;
-  border-left: 1px solid #c3c2c2;
 
-  &:nth-child(n+13) {
+  border-right: 1px solid #c3c2c2;
+
+  &:nth-child(4n) {
+    border-right: none;
+  }
+
+  &:nth-last-child(-n+4):nth-child(4n+1){
     border-bottom: none;
   }
 
-  &:nth-child(1), &:nth-child(5), &:nth-child(9), &:nth-child(13) {
-    border-left: none;
+  &:nth-last-child(-n+4):nth-child(4n):last-child{
+    border-bottom: none;
   }
 
   &:hover {

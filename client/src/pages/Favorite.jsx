@@ -20,8 +20,7 @@ const Favorite = () => {
 			.get('http://localhost:3500/api/like', header)
 			.then((res) => res.data)
 			.then((data) => {
-				console.log('찜목록 조회', data);
-				setContents(data); // 찜 데이터
+				setContents(data);
 			});
 	});
 

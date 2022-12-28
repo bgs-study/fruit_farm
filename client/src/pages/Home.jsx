@@ -59,14 +59,6 @@ const Home = React.memo(() => {
     getFarmData(option, 20);
 	}, [option]);
 
-  useEffect(()=>{
-    console.log('컨텐츠 상태', contents);
-  }, [contents])
-
-  useEffect(()=> {
-    console.log('페이지 = ', page);
-  }, [page])
-
 	const getFarmData = useCallback(
 		async ({ location, fruit }, last) => {
 
@@ -107,7 +99,6 @@ const Home = React.memo(() => {
           .then((res) => {
             const data = res.data;
             const d = data.slice(length*page, length*(page+1));
-            console.log('배열 길이', d.length);
             console.log('가져온 데이터', data.slice(length*page, length*(page+1)));
             if (d.length === 0) {
               console.log('no data');
@@ -124,37 +115,7 @@ const Home = React.memo(() => {
     }
 	);
 
-	//   const getData = useCallback( async (options) => {
-	// // /api/farm/location?address/:page
-	//     const optionKey = Object.keys(options);
-
-	//     if (optionKey.includes('location')) {
-	//       const location = options.location;
-
-	//       await axios.get(`/api/farm/location?search=${location}/${page}`)
-	//       .then(res=>res.data)
-	//       .then(async data=>{
-	//         setContents(contents.concat(data));
-	//         setPage(page + 1);
-
-	//       });
-
-	//     } else{
-	//       console.log('전체 조회 api 실행');
-	//       await axios.get(`/api/farms/${page}`).then(res=>{
-	//         return res.data;
-	//       }).then(data=>{
-
-	//         setContents(contents.concat(data));
-	//         setPage(page + 1);
-
-	//         return data;
-	//       })
-	//     }
-	//   });
-
 	return (
-		// <FarmList contents={contents}/>
 		<InfiniteScroll
 			dataLength={contents.length}
 			next={() => {
@@ -170,7 +131,6 @@ const Home = React.memo(() => {
 				setFavorite={setFavorite}
 			/>
 		</InfiniteScroll>
-		// <FarmList contents={contents} favorite={favorite} setFavorite={setFavorite}/>
 	);
 });
 
