@@ -3,11 +3,17 @@ import styled from 'styled-components';
 import axios from 'axios';
 import FarmFormat from '../components/FarmFormat';
 import FarmReservationTable from '../components/FarmReservationTable';
+import { HOST, yellow, green } from '../global-variables';
+import {
+	SubmitButton,
+	ConfirmButton,
+	DeleteButton,
+	Input,
+	NormalButton,
+	StyledTitle,
+} from '../styles/Styled';
 
-const Subject = styled.h2`
-	text-align: center;
-	margin-top: 7%;
-`;
+const Subject = styled(StyledTitle)``;
 
 const FarmReservation = () => {
 	return (

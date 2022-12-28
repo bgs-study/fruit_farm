@@ -479,7 +479,7 @@ const Payment = () => {
 									<NormalBtn
 										onClick={() => {
 											dispatch(closeModal());
-											navigate(`/myreservation`);
+											navigate(`/mypage/reservation`);
 										}}
 									>
 										구매내역보기
