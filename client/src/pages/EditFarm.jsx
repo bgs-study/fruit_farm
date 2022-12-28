@@ -32,22 +32,13 @@ const EditFarm = () => {
 	const [description, setDescription] = useState('');
 	const [owner, setOwner] = useState('');
 	const [imgs, setImgs] = useState('');
-	const [farmId, setFarmId] = useState(null);
 
 	// memo 지우: 초기 렌더링시 데이터 받아와서 상태값 설정 -> input value에 넣기
 	async function fetchData() {
-		let farmId;
 		try {
 			await API.get(`${HOST}/api/farms/farminformation`).then((res) => {
 				if (res.data.farmInfo !== null) {
-					const farmInfo = res.data.farmInfo;
-					setFarmData(farmInfo);
-					setType(farmInfo.type);
-					setName(farmInfo.name);
-					setAddress(farmInfo.address);
-					setDescription(farmInfo.description);
-					setOwner(farmInfo.owner);
-					setFarmId(farmInfo.id);
+					setFarmData(res.data.farmInfo);
 				}
 			});
 		} catch (e) {
@@ -84,8 +75,10 @@ const EditFarm = () => {
 			});
 		}
 
+		console.log('전달데이터', { type, name, address });
+
 		try {
-			await axios(`${HOST}/api/farms/${farmId}`, {
+			await axios(`${HOST}/api/farms/${farmData.id}`, {
 				method: 'PATCH',
 				headers: {
 					'Content-Type': 'multipart/form-data',
@@ -149,26 +142,26 @@ const EditFarm = () => {
 					<Input
 						type="text"
 						name="type"
-						defaultValue={type}
+						defaultValue={farmData.type}
 						onChange={(e) => setType(e.target.value)}
 					></Input>
 					<Label>농장명</Label>
 					<Input
 						type="text"
 						name="name"
-						defaultValue={name}
+						defaultValue={farmData.name}
 						onChange={(e) => setName(e.target.value)}
 					></Input>
 					<Label>농장주 이름</Label>
 					<Input
 						type="text"
 						name="owner"
-						defaultValue={owner}
+						defaultValue={farmData.owner}
 						onChange={(e) => setOwner(e.target.value)}
 					></Input>
 					<Label>농장주소</Label>
 					<FindAddress
-						name={address}
+						name={farmData.address}
 						setAddress={setAddress}
 						setDetailAddress={setDetailAddress}
 					/>
@@ -184,7 +177,7 @@ const EditFarm = () => {
 					<Textarea
 						type="text"
 						name="description"
-						defaultValue={description}
+						defaultValue={farmData.description}
 						onChange={(e) => setDescription(e.target.value)}
 					></Textarea>
 					<Button type="button" onClick={onClickModify}>

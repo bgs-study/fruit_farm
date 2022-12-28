@@ -12,7 +12,7 @@ export const logout = () => {
 	// memo 지우: 해당 url이라면 홈화면으로 이동
 	if (
 		window.location.pathname === '/pay' ||
-		window.location.pathname === '/mypage' ||
+		window.location.pathname.slice(0, 7) === '/mypage' ||
 		window.location.pathname.slice(0, 5) === '/farm'
 	) {
 		window.location.href = '/';

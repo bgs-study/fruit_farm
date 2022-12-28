@@ -1,25 +1,59 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import * as API from '../lib/userApi';
-import { HOST } from './../global-variables';
+import { HOST, gray, yellow } from './../global-variables';
+import {
+	StyledTitle,
+	StyledSubTitle,
+	ConfirmButton,
+	DeleteButton,
+} from '../styles/Styled';
 
-const Title = styled.h1``;
+const Wrapper = styled.div``;
+
+const Title = styled(StyledTitle)`
+	display: block;
+	text-align: center;
+	margin-bottom: 40px;
+`;
 const Line = styled.div`
 	display: flex;
+	align-items: center;
+	margin-bottom: 10px;
+	padding-bottom: 10px;
 `;
-const Lable = styled.span`
-	width: 20%;
+const LableWrapper = styled.div`
+	display: flex;
+	height: 100%;
+	align-items: flex-start;
+`;
+const Lable = styled(StyledSubTitle)`
+	width: 130px;
+	min-width: 130px;
 	margin-right: 5px;
+	margin-bottom: 0;
+	display: flex;
 `;
 const Content = styled.div``;
 
-const Button = styled.button``;
+const ImgWrapper = styled.div`
+	width: 150px;
+	height: 120px;
+`;
 
 const Img = styled.img`
-	width: 200px;
-	+ img {
+	width: 150px;
+	margin-top: 5px;
+	height: + img {
 		margin-left: 5px;
 	}
+`;
+
+const BtnWrapper = styled.div`
+	display: flex;
+	flex-direction: row;
+	justify-content: end;
+	align-items: end;
 `;
 
 const ShowFarm = ({ farmData }) => {
@@ -32,7 +66,7 @@ const ShowFarm = ({ farmData }) => {
 	};
 
 	return (
-		<>
+		<Wrapper>
 			<Title>농장 정보</Title>
 			<Line>
 				<Lable>과일 종류</Lable>
@@ -55,18 +89,28 @@ const ShowFarm = ({ farmData }) => {
 				<Content>{farmData.description}</Content>
 			</Line>
 			<Line>
-				<Lable>이미지</Lable>
-				{imgs[0] && <Img src={imgs[0]} alt="이미지 불러오기 실패" />}
-				{imgs[1] && <Img src={imgs[1]} alt="이미지 불러오기 실패" />}
-				{imgs[2] && <Img src={imgs[2]} alt="이미지 불러오기 실패" />}
+				<LableWrapper>
+					<Lable style={{ marginBottom: '80%' }}>이미지</Lable>
+				</LableWrapper>
+				<ImgWrapper>
+					{imgs[0] && <Img src={imgs[0]} alt="이미지 불러오기 실패" />}
+				</ImgWrapper>
+				<ImgWrapper>
+					{imgs[1] && <Img src={imgs[1]} alt="이미지 불러오기 실패" />}
+				</ImgWrapper>
+				<ImgWrapper>
+					{imgs[2] && <Img src={imgs[2]} alt="이미지 불러오기 실패" />}
+				</ImgWrapper>
 			</Line>
 			<Line>
-				<Link to="/farm/edit">
-					<Button>수정</Button>
-				</Link>
-				<Button onClick={onClickDel}>삭제</Button>
+				<BtnWrapper>
+					<Link to="/farm/edit">
+						<ConfirmButton style={{ marginRight: '5px' }}>수정</ConfirmButton>
+					</Link>
+					<DeleteButton onClick={onClickDel}>삭제</DeleteButton>
+				</BtnWrapper>
 			</Line>
-		</>
+		</Wrapper>
 	);
 };
 

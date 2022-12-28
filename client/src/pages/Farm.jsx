@@ -11,7 +11,7 @@ function MyFarm() {
 		try {
 			await API.get('http://localhost:3500/api/farmers/farmInfo').then(
 				(res) => {
-					if (res.data.farmInfo !== null) {
+					if (res.data) {
 						setFarmData(res.data);
 					}
 				},
