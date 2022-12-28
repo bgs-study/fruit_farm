@@ -1,27 +1,32 @@
 import React from 'react';
 import styled from 'styled-components';
 import FarmFormat from '../components/FarmFormat';
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import ModalContainer from './../components/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { showModal } from '../store/ModalSlice';
 import Moment from 'moment';
 import * as API from '../lib/userApi';
+import { StatusSelect, NormalButton } from '../styles/Styled';
+import { yellow } from '../global-variables';
+import { HOST } from './../global-variables';
 
 const Subject = styled.h2`
 	text-align: center;
 	margin-top: 7%;
+	margin-bottom: 3%;
 `;
 
-const DateSelect = styled.select``;
+const DateSelect = styled(StatusSelect)`
+	margin-bottom: 3%;
+`;
 
 const ReviewBox = styled.div`
 	display: flex;
 	position: relative;
 	flex-direction: column;
-	margin-bottom: 3rem;
-	border: solid 1px #d9d9d9;
+	margin-bottom: 3%;
+	border: solid 1px ${yellow};
 	border-radius: 10px;
 	width: 100%;
 	padding: 1rem;
@@ -40,10 +45,15 @@ const InfoText = styled.p`
 
 const InfoTextInMadal = styled.div``;
 
-const Button = styled.button`
+const Button = styled(NormalButton)`
 	position: absolute;
 	top: 1rem;
 	right: 1rem;
+`;
+
+const SelectWrapper = styled.div`
+	display: flex;
+	justify-content: flex-end;
 `;
 
 const FarmReview = () => {
@@ -56,7 +66,7 @@ const FarmReview = () => {
 
 	const fetchData = async () => {
 		try {
-			await API.get('//localhost:3500/api/review/farmer').then((res) => {
+			await API.get(`${HOST}/api/review/farmer`).then((res) => {
 				let fixedData = res.data.map(({ review, reserve }) => {
 					return {
 						id: review.id,
@@ -120,19 +130,27 @@ const FarmReview = () => {
 		<>
 			<FarmFormat>
 				<Subject>후기 관리</Subject>
-				<DateSelect onChange={(e) => setSelectedDate(e.target.value)}>
-					<option value="지난 3개월">지난 3개월</option>
-					<option value="지난 6개월">지난 6개월</option>
-					<option value="지난 1년">지난 1년</option>
-				</DateSelect>
+				<SelectWrapper>
+					<DateSelect onChange={(e) => setSelectedDate(e.target.value)}>
+						<option value="지난 3개월">지난 3개월</option>
+						<option value="지난 6개월">지난 6개월</option>
+						<option value="지난 1년">지난 1년</option>
+					</DateSelect>
+				</SelectWrapper>
 				{filteredData &&
 					filteredData.map((review) => {
 						return (
 							<ReviewBox key={review.id}>
 								<InfoWrapper>
-									<Info>작성일: {review.createDate}</Info>
-									<Info>예약일: {review.date}</Info>
-									<Info>인원: {review.people}</Info>
+									<Info>
+										<b>작성일:</b> {review.createDate}
+									</Info>
+									<Info>
+										<b>예약일:</b> {review.date}
+									</Info>
+									<Info>
+										<b>인원:</b> {review.people}
+									</Info>
 								</InfoWrapper>
 								<InfoText>{review.content}</InfoText>
 								<Button name={review.id} onClick={(e) => onClickBtn(e)}>
@@ -144,9 +162,15 @@ const FarmReview = () => {
 				{modalOpen && (
 					<ModalContainer>
 						<InfoWrapper>
-							<Info>작성일: {modalData.createDate}</Info>
-							<Info>예약일: {modalData.date}</Info>
-							<Info>인원: {modalData.people}명</Info>
+							<Info>
+								<b>작성일:</b> {modalData.createDate}
+							</Info>
+							<Info>
+								<b>예약일:</b> {modalData.date}
+							</Info>
+							<Info>
+								<b>인원:</b> {modalData.people}명
+							</Info>
 							<InfoText>{modalData.content}</InfoText>
 						</InfoWrapper>
 						<InfoTextInMadal></InfoTextInMadal>

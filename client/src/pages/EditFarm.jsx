@@ -6,21 +6,42 @@ import axios from 'axios';
 import { useNavigate } from 'react-router';
 import FindAddress from '../components/FindAddress';
 import { HOST } from './../global-variables';
+import { StyledTitle, Input, SubmitButton } from '../styles/Styled';
 
-const Tittle = styled.h1``;
+const Tittle = styled.h2`
+	text-align: center;
+	margin-top: 7%;
+	margin-bottom: 3%;
+`;
 
 const Form = styled.form`
 	display: flex;
 	flex-direction: column;
+	margin: 0 25%;
 `;
 
-const Label = styled.label``;
+const Wrapper = styled.div`
+	margin-bottom: 5px;
+	display: flex;
+	align-items: center;
+`;
 
-const Input = styled.input``;
+const Label = styled.label`
+	min-width: 80px;
+`;
 
-const Textarea = styled.textarea``;
+const FarmInput = styled(Input)`
+	width: 300px;
+	margin-left: 10px;
+`;
 
-const Button = styled.button``;
+const FarmTextarea = styled.textarea`
+	border-radius: 10px;
+	border: 1px solid lightgray;
+	margin-top: 2%;
+`;
+
+const Button = styled(SubmitButton)``;
 
 const EditFarm = () => {
 	const navigate = useNavigate();
@@ -138,48 +159,58 @@ const EditFarm = () => {
 			<FarmFormat>
 				<Tittle>농장 정보 수정</Tittle>
 				<Form>
-					<Label>과일종류</Label>
-					<Input
-						type="text"
-						name="type"
-						defaultValue={farmData.type}
-						onChange={(e) => setType(e.target.value)}
-					></Input>
-					<Label>농장명</Label>
-					<Input
-						type="text"
-						name="name"
-						defaultValue={farmData.name}
-						onChange={(e) => setName(e.target.value)}
-					></Input>
-					<Label>농장주 이름</Label>
-					<Input
-						type="text"
-						name="owner"
-						defaultValue={farmData.owner}
-						onChange={(e) => setOwner(e.target.value)}
-					></Input>
-					<Label>농장주소</Label>
-					<FindAddress
-						name={farmData.address}
-						setAddress={setAddress}
-						setDetailAddress={setDetailAddress}
-					/>
-					<Label htmlFor="profile-upload">이미지</Label>
-					<Input
-						type="file"
-						id="profile-upload"
-						accept="image/*"
-						multiple="multiple"
-						onChange={onChangeImg}
-					/>
+					<Wrapper>
+						<Label>과일종류</Label>
+						<FarmInput
+							type="text"
+							name="type"
+							defaultValue={farmData.type}
+							onChange={(e) => setType(e.target.value)}
+						></FarmInput>
+					</Wrapper>
+					<Wrapper>
+						<Label>농장명</Label>
+						<FarmInput
+							type="text"
+							name="name"
+							defaultValue={farmData.name}
+							onChange={(e) => setName(e.target.value)}
+						></FarmInput>
+					</Wrapper>
+					<Wrapper>
+						<Label>농장주 이름</Label>
+						<FarmInput
+							type="text"
+							name="owner"
+							defaultValue={farmData.owner}
+							onChange={(e) => setOwner(e.target.value)}
+						></FarmInput>
+					</Wrapper>
+					<Wrapper>
+						<Label>주소</Label>
+						<FindAddress
+							name={farmData.address}
+							setAddress={setAddress}
+							setDetailAddress={setDetailAddress}
+						/>
+					</Wrapper>
+					<Wrapper>
+						<Label htmlFor="profile-upload">이미지</Label>
+						<FarmInput
+							type="file"
+							id="profile-upload"
+							accept=".jpg, .jpeg, .png"
+							multiple="multiple"
+							onChange={onChangeImg}
+						/>
+					</Wrapper>
 					<Label>체험설명</Label>
-					<Textarea
+					<FarmTextarea
 						type="text"
 						name="description"
 						defaultValue={farmData.description}
 						onChange={(e) => setDescription(e.target.value)}
-					></Textarea>
+					/>
 					<Button type="button" onClick={onClickModify}>
 						완료
 					</Button>
@@ -191,44 +222,54 @@ const EditFarm = () => {
 			<FarmFormat>
 				<Tittle>농장 정보 등록</Tittle>
 				<Form>
-					<Label>과일종류</Label>
-					<Input
-						type="text"
-						name="type"
-						onChange={(e) => setType(e.target.value)}
-					></Input>
-					<Label>농장명</Label>
-					<Input
-						type="text"
-						name="name"
-						onChange={(e) => setName(e.target.value)}
-					></Input>
-					<Label>농장주 이름</Label>
-					<Input
-						type="text"
-						name="owner"
-						onChange={(e) => setOwner(e.target.value)}
-					></Input>
-					<Label>농장주소</Label>
-					<FindAddress
-						name={address}
-						setAddress={setAddress}
-						setDetailAddress={setDetailAddress}
-					/>
-					<Label htmlFor="profile-upload">이미지</Label>
-					<Input
-						type="file"
-						id="profile-upload"
-						accept="image/*"
-						multiple="multiple"
-						onChange={onChangeImg}
-					/>
+					<Wrapper>
+						<Label>과일종류</Label>
+						<FarmInput
+							type="text"
+							name="type"
+							onChange={(e) => setType(e.target.value)}
+						></FarmInput>
+					</Wrapper>
+					<Wrapper>
+						<Label>농장명</Label>
+						<FarmInput
+							type="text"
+							name="name"
+							onChange={(e) => setName(e.target.value)}
+						></FarmInput>
+					</Wrapper>
+					<Wrapper>
+						<Label>농장주 이름</Label>
+						<FarmInput
+							type="text"
+							name="owner"
+							onChange={(e) => setOwner(e.target.value)}
+						></FarmInput>
+					</Wrapper>
+					<Wrapper>
+						<Label>주소</Label>
+						<FindAddress
+							name={address}
+							setAddress={setAddress}
+							setDetailAddress={setDetailAddress}
+						/>
+					</Wrapper>
+					<Wrapper>
+						<Label htmlFor="profile-upload">이미지</Label>
+						<FarmInput
+							type="file"
+							id="profile-upload"
+							accept="image/*"
+							multiple="multiple"
+							onChange={onChangeImg}
+						/>
+					</Wrapper>
 					<Label>체험설명</Label>
-					<Textarea
+					<FarmTextarea
 						type="text"
 						name="description"
 						onChange={(e) => setDescription(e.target.value)}
-					></Textarea>
+					/>
 					<Button onClick={onClickRegistration} type="button">
 						완료
 					</Button>

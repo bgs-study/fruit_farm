@@ -56,10 +56,10 @@ const ButtonWrapper = styled.div`
 const SubmitBtn = styled(SubmitButton)`
 	width: 150px;
 	height: 40px;
+	padding: 1rem 1rem;
 `;
 
 const Line = styled.div`
-	content: '  ';
 	display: block;
 	width: 100%;
 	height: 0.5px;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { SubmitButton } from '../styles/Styled';
 
 const Wrapper = styled.div`
 	margin-top: 10%;
@@ -8,11 +9,10 @@ const Wrapper = styled.div`
 `;
 
 const Div = styled.div`
+	font-size: 1.5rem;
 	text-align: center;
 	margin-bottom: 5%;
 `;
-
-const Button = styled.button``;
 
 const CreateFarm = ({ farmData }) => {
 	return (
@@ -24,7 +24,7 @@ const CreateFarm = ({ farmData }) => {
 			</Div>
 			<Div>
 				<Link to="/farm/edit">
-					<Button>등록하기</Button>
+					<SubmitButton>등록하기</SubmitButton>
 				</Link>
 			</Div>
 		</Wrapper>

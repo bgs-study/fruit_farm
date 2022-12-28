@@ -1,20 +1,14 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import * as API from '../lib/userApi';
-import { HOST, gray, yellow } from './../global-variables';
-import {
-	StyledTitle,
-	StyledSubTitle,
-	ConfirmButton,
-	DeleteButton,
-} from '../styles/Styled';
+import { HOST } from './../global-variables';
+import { StyledSubTitle, ConfirmButton, DeleteButton } from '../styles/Styled';
 
 const Wrapper = styled.div``;
 
-const Title = styled(StyledTitle)`
-	display: block;
+const Subject = styled.h2`
 	text-align: center;
-	margin-bottom: 40px;
+	margin: 7% 0 10% 0;
 `;
 const Line = styled.div`
 	display: flex;
@@ -33,26 +27,23 @@ const Lable = styled(StyledSubTitle)`
 	margin-right: 5px;
 	margin-bottom: 0;
 	display: flex;
+	font-size: 1.1rem;
 `;
 const Content = styled.div``;
 
-const ImgWrapper = styled.div`
-	width: 150px;
-	height: 120px;
-`;
+const ImgWrapper = styled.div``;
 
 const Img = styled.img`
-	width: 150px;
-	margin-top: 5px;
-	height: + img {
-		margin-left: 5px;
-	}
+	width: 200px;
+	height: 120px;
+	object-fit: cover;
+	margin: 5px 0 0 5px;
 `;
 
 const BtnWrapper = styled.div`
 	display: flex;
 	flex-direction: row;
-	justify-content: end;
+	justify-content: flex-end;
 	align-items: end;
 `;
 
@@ -67,7 +58,7 @@ const ShowFarm = ({ farmData }) => {
 
 	return (
 		<Wrapper>
-			<Title>농장 정보</Title>
+			<Subject>농장 정보</Subject>
 			<Line>
 				<Lable>과일 종류</Lable>
 				<Content>{farmData.type}</Content>
@@ -102,14 +93,12 @@ const ShowFarm = ({ farmData }) => {
 					{imgs[2] && <Img src={imgs[2]} alt="이미지 불러오기 실패" />}
 				</ImgWrapper>
 			</Line>
-			<Line>
-				<BtnWrapper>
-					<Link to="/farm/edit">
-						<ConfirmButton style={{ marginRight: '5px' }}>수정</ConfirmButton>
-					</Link>
-					<DeleteButton onClick={onClickDel}>삭제</DeleteButton>
-				</BtnWrapper>
-			</Line>
+			<BtnWrapper>
+				<Link to="/farm/edit">
+					<ConfirmButton style={{ marginRight: '5px' }}>수정</ConfirmButton>
+				</Link>
+				<DeleteButton onClick={onClickDel}>삭제</DeleteButton>
+			</BtnWrapper>
 		</Wrapper>
 	);
 };
