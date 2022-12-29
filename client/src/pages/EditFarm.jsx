@@ -5,8 +5,7 @@ import * as API from '../lib/userApi';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 import FindAddress from '../components/FindAddress';
-import { HOST } from './../global-variables';
-import { StyledTitle, Input, SubmitButton } from '../styles/Styled';
+import { Input, SubmitButton } from '../styles/Styled';
 
 const Tittle = styled.h2`
 	text-align: center;
@@ -57,7 +56,7 @@ const EditFarm = () => {
 	// memo 지우: 초기 렌더링시 데이터 받아와서 상태값 설정 -> input value에 넣기
 	async function fetchData() {
 		try {
-			await API.get(`${HOST}/api/farms/farminformation`).then((res) => {
+			await API.get(`/api/farms/farminformation`).then((res) => {
 				if (res.data.farmInfo !== null) {
 					setFarmData(res.data.farmInfo);
 				}
@@ -99,7 +98,7 @@ const EditFarm = () => {
 		console.log('전달데이터', { type, name, address });
 
 		try {
-			await axios(`${HOST}/api/farms/${farmData.id}`, {
+			await axios(`/api/farms/${farmData.id}`, {
 				method: 'PATCH',
 				headers: {
 					'Content-Type': 'multipart/form-data',
@@ -131,7 +130,7 @@ const EditFarm = () => {
 			});
 
 			try {
-				await axios(`${HOST}/api/farms`, {
+				await axios(`/api/farms`, {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'multipart/form-data',

@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import * as API from '../lib/userApi';
-import { HOST } from './../global-variables';
 import { StyledSubTitle, ConfirmButton, DeleteButton } from '../styles/Styled';
 
 const Wrapper = styled.div``;
@@ -51,7 +50,7 @@ const ShowFarm = ({ farmData }) => {
 	const imgs = farmData.url.split(',');
 
 	const onClickDel = async () => {
-		await API.delete(`${HOST}/api/farms/${farmData.id}`);
+		await API.delete(`/api/farms/${farmData.id}`);
 		alert('농장이 삭제되었습니다.');
 		window.location.reload();
 	};
@@ -84,13 +83,13 @@ const ShowFarm = ({ farmData }) => {
 					<Lable style={{ marginBottom: '80%' }}>이미지</Lable>
 				</LableWrapper>
 				<ImgWrapper>
-					{imgs[0] && <Img src={imgs[0]} alt="이미지 불러오기 실패" />}
+					{imgs[0] && <Img src={imgs[0]} alt="농장 이미지1" />}
 				</ImgWrapper>
 				<ImgWrapper>
-					{imgs[1] && <Img src={imgs[1]} alt="이미지 불러오기 실패" />}
+					{imgs[1] && <Img src={imgs[1]} alt="농장 이미지2" />}
 				</ImgWrapper>
 				<ImgWrapper>
-					{imgs[2] && <Img src={imgs[2]} alt="이미지 불러오기 실패" />}
+					{imgs[2] && <Img src={imgs[2]} alt="농장 이미지3" />}
 				</ImgWrapper>
 			</Line>
 			<BtnWrapper>

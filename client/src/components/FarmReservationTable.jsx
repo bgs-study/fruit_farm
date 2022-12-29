@@ -99,7 +99,7 @@ const FarmReservationTable = ({}) => {
 	// memo 지우: 모든 예약목록 받아오기
 	const fetchData = async () => {
 		try {
-			await API.get('//localhost:3500/api/reserve/farmer').then((res) => {
+			await API.get('/api/reserve/farmer').then((res) => {
 				setOriginalData(res.data);
 				setFilteredData(res.data);
 			});
@@ -145,7 +145,7 @@ const FarmReservationTable = ({}) => {
 		const id = e.target.name;
 
 		try {
-			await API.patch(`//localhost:3500/api/reserve/farmer/${id}`, {
+			await API.patch(`/api/reserve/farmer/${id}`, {
 				status: '예약완료',
 			});
 			alert('예약이 확정되었습니다.');
@@ -160,7 +160,7 @@ const FarmReservationTable = ({}) => {
 		const id = e.target.name;
 
 		try {
-			await API.patch(`//localhost:3500/api/reserve/farmer/${id}`, {
+			await API.patch(`/api/reserve/farmer/${id}`, {
 				status: '예약취소',
 			});
 			alert('예약이 취소되었습니다.');
@@ -181,117 +181,125 @@ const FarmReservationTable = ({}) => {
 	}, [statusOption, dateOption]);
 
 	if (filteredData) {
-		return (
-			<>
-				<MainDiv>
-					<FilterWrapper>
-						<div>
-							{statusList.map((status) => (
-								<StatusButton
-									key={status}
-									onClick={() => setStatusOption(status)}
-									clicked={statusOption === status ? true : false}
-								>
-									{status}
-								</StatusButton>
-							))}
-						</div>
-						<div>
-							<StatusSelect onChange={(e) => setDateOption(e.target.value)}>
-								<option value="최근순">최근순</option>
-								<option value="오래된순">오래된순</option>
-							</StatusSelect>
-						</div>
-					</FilterWrapper>
-					<Table>
-						<Thead>
-							<Tr>
-								<Td scope="col">
-									<StyledSubTitle>예약날짜</StyledSubTitle>
-								</Td>
-								<Td scope="col">
-									<StyledSubTitle>예약번호</StyledSubTitle>
-								</Td>
-								<Td scope="col">
-									<StyledSubTitle>예약자</StyledSubTitle>
-								</Td>
-								<Td scope="col">
-									<StyledSubTitle>예약정보</StyledSubTitle>
-								</Td>
-								<Td scope="col">
-									<StyledSubTitle>결제</StyledSubTitle>
-								</Td>
-								<Td scope="col">
-									<StyledSubTitle>예약상태</StyledSubTitle>
-								</Td>
-							</Tr>
-						</Thead>
-						<tbody>
-							{filteredData.slice(offset, offset + 10).map((oneReservation) => {
-								const { time, reserve } = oneReservation;
-								return (
-									<Tr key={reserve.id}>
-										<Td>{reserve.createdAt.slice(0, 10)}</Td>
-										<Td>{reserve.id}</Td>
-										<Td>
-											{reserve.name}
-											<br />
-											{reserve.email}
-											<br />
-											{reserve.phoneNum}
-										</Td>
-										<Td>
-											{time.date}
-											<br />
-											{`${time.start_time} - ${time.end_time}`}
-											<br />
-											인원: {time.people}명
-										</Td>
-										<Td>
-											{reserve.total_price.toLocaleString('ko-KR')}원<br />
-											{reserve.payment === 'card' && '카드결제'}
-											{reserve.payment === 'transfer' && '계좌이체'}
-										</Td>
-										<BtnTd>
-											<div>
-												<StyledStatusLabel>{reserve.status}</StyledStatusLabel>
-											</div>
-											<div>
-												{reserve.status === '예약대기' && (
-													<ConfirmButton
-														name={reserve.id}
-														onClick={(e) => onClickRezConfirm(e)}
-													>
-														예약확정
-													</ConfirmButton>
-												)}
-											</div>
-											<div>
-												{(reserve.status === '예약대기' ||
-													reserve.status === '예약완료') && (
-													<DeleteButton
-														name={reserve.id}
-														onClick={(e) => onClickRezCancel(e)}
-													>
-														예약취소
-													</DeleteButton>
-												)}
-											</div>
-										</BtnTd>
-									</Tr>
-								);
-							})}
-						</tbody>
-					</Table>
-					<Pagination
-						total={filteredData.length}
-						limit={10}
-						page={page}
-						setPage={setPage}
-					/>
-				</MainDiv>
-			</>
-		);
+		if (filterData.length === 0) {
+			return <FailAnnouncement>예약 정보가 없습니다.</FailAnnouncement>;
+		} else if (filterData.length > 0) {
+			return (
+				<>
+					<MainDiv>
+						<FilterWrapper>
+							<div>
+								{statusList.map((status) => (
+									<StatusButton
+										key={status}
+										onClick={() => setStatusOption(status)}
+										clicked={statusOption === status ? true : false}
+									>
+										{status}
+									</StatusButton>
+								))}
+							</div>
+							<div>
+								<StatusSelect onChange={(e) => setDateOption(e.target.value)}>
+									<option value="최근순">최근순</option>
+									<option value="오래된순">오래된순</option>
+								</StatusSelect>
+							</div>
+						</FilterWrapper>
+						<Table>
+							<Thead>
+								<Tr>
+									<Td scope="col">
+										<StyledSubTitle>예약날짜</StyledSubTitle>
+									</Td>
+									<Td scope="col">
+										<StyledSubTitle>예약번호</StyledSubTitle>
+									</Td>
+									<Td scope="col">
+										<StyledSubTitle>예약자</StyledSubTitle>
+									</Td>
+									<Td scope="col">
+										<StyledSubTitle>예약정보</StyledSubTitle>
+									</Td>
+									<Td scope="col">
+										<StyledSubTitle>결제</StyledSubTitle>
+									</Td>
+									<Td scope="col">
+										<StyledSubTitle>예약상태</StyledSubTitle>
+									</Td>
+								</Tr>
+							</Thead>
+							<tbody>
+								{filteredData
+									.slice(offset, offset + 10)
+									.map((oneReservation) => {
+										const { time, reserve } = oneReservation;
+										return (
+											<Tr key={reserve.id}>
+												<Td>{reserve.createdAt.slice(0, 10)}</Td>
+												<Td>{reserve.id}</Td>
+												<Td>
+													{reserve.name}
+													<br />
+													{reserve.email}
+													<br />
+													{reserve.phoneNum}
+												</Td>
+												<Td>
+													{time.date}
+													<br />
+													{`${time.start_time} - ${time.end_time}`}
+													<br />
+													인원: {time.people}명
+												</Td>
+												<Td>
+													{reserve.total_price.toLocaleString('ko-KR')}원<br />
+													{reserve.payment === 'card' && '카드결제'}
+													{reserve.payment === 'transfer' && '계좌이체'}
+												</Td>
+												<BtnTd>
+													<div>
+														<StyledStatusLabel>
+															{reserve.status}
+														</StyledStatusLabel>
+													</div>
+													<div>
+														{reserve.status === '예약대기' && (
+															<ConfirmButton
+																name={reserve.id}
+																onClick={(e) => onClickRezConfirm(e)}
+															>
+																예약확정
+															</ConfirmButton>
+														)}
+													</div>
+													<div>
+														{(reserve.status === '예약대기' ||
+															reserve.status === '예약완료') && (
+															<DeleteButton
+																name={reserve.id}
+																onClick={(e) => onClickRezCancel(e)}
+															>
+																예약취소
+															</DeleteButton>
+														)}
+													</div>
+												</BtnTd>
+											</Tr>
+										);
+									})}
+							</tbody>
+						</Table>
+						<Pagination
+							total={filteredData.length}
+							limit={10}
+							page={page}
+							setPage={setPage}
+						/>
+					</MainDiv>
+				</>
+			);
+		}
 	} else {
 		return <FailAnnouncement>예약 정보가 없습니다.</FailAnnouncement>;
 	}

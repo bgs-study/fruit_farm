@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { formSchema } from '../hooks/useForm';
 import { SubmitButton, Input } from '../styles/Styled';
-import { HOST } from './../global-variables';
 
 const RegisterWrapper = styled.div`
 	padding: 10%;
@@ -49,10 +48,7 @@ const ButtonWrapper = styled.div`
 	align-items: center;
 	margin-top: 20px;
 `;
-const RegisterBtn = styled(SubmitButton)`
-	width: 150px;
-	height: 40px;
-`;
+const RegisterBtn = styled(SubmitButton)``;
 
 const Line = styled.div`
 	content: '  ';
@@ -77,7 +73,7 @@ function Register() {
 		try {
 			const joinData = { email, password, phoneNum, name };
 
-			await userApi.post(`${HOST}/api/signup`, joinData).then((res) => {
+			await userApi.post(`/api/signup`, joinData).then((res) => {
 				alert(`정상적으로 회원 가입되었습니다.`);
 				navigate('/login');
 			});
@@ -90,7 +86,7 @@ function Register() {
 		try {
 			const joinData = { email, password, phoneNum, name };
 
-			await userApi.post(`${HOST}/api/farmers/signup`, joinData).then((res) => {
+			await userApi.post(`/api/farmers/signup`, joinData).then((res) => {
 				alert(`정상적으로 농장주 가입되었습니다.`);
 				navigate('/login');
 			});

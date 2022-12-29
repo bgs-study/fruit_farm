@@ -1,21 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 import FarmFormat from '../components/FarmFormat';
 import FarmReservationTable from '../components/FarmReservationTable';
-import { StyledTitle } from '../styles/Styled';
 
-const Subject = styled(StyledTitle)`
-	display: flex;
-	justify-content: center;
-	min-width: 760px;
+const Tittle = styled.h2`
+	text-align: center;
+	margin-top: 7%;
+	margin-bottom: 3%;
 `;
 
 const FarmReservation = () => {
 	return (
 		<>
 			<FarmFormat>
-				<Subject>예약관리</Subject>
+				<Tittle>예약관리</Tittle>
 				<FarmReservationTable />
 			</FarmFormat>
 		</>
