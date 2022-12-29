@@ -8,10 +8,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { formSchema } from '../hooks/useForm';
 import { SubmitButton, Input } from '../styles/Styled';
 
-const RegisterWrapper = styled.div`
-	padding: 10%;
-`;
-
 const Title = styled.h1`
 	text-align: center;
 	font-size: 2rem;
@@ -21,9 +17,9 @@ const Title = styled.h1`
 const InputForm = styled.form`
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	align-items: center;
-	margin: 10% 0;
+	width: 100%;
+	margin-top: 3%;
 `;
 
 const InputFormLine = styled.div`
@@ -42,21 +38,30 @@ const RegisterInput = styled(Input)`
 	margin-left: 5px;
 	width: 300px;
 `;
+
 const ButtonWrapper = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	margin-top: 20px;
 `;
-const RegisterBtn = styled(SubmitButton)``;
+
+const RegisterBtn = styled(SubmitButton)`
+	width: 15rem;
+`;
 
 const Line = styled.div`
 	content: '  ';
 	display: block;
-	width: 100%;
+	width: 600px;
 	height: 0.5px;
 	background-color: #b1b0ac;
-	margin: 5% 0;
+	margin: 3% 0 1% 0;
+`;
+
+const LinkDiv = styled.div`
+	width: 600px;
+	display: flex;
+	justify-content: flex-end;
 `;
 
 function Register() {
@@ -96,7 +101,7 @@ function Register() {
 	};
 
 	return (
-		<RegisterWrapper>
+		<>
 			<Title>회원가입</Title>
 			<InputForm>
 				<InputWrapper>
@@ -161,10 +166,12 @@ function Register() {
 						농장주 가입하기
 					</RegisterBtn>
 				</ButtonWrapper>
+				<Line />
+				<LinkDiv>
+					<Link to="/login">로그인하기</Link>
+				</LinkDiv>
 			</InputForm>
-			<Line />
-			<Link to="/login">로그인하기</Link>
-		</RegisterWrapper>
+		</>
 	);
 }
 

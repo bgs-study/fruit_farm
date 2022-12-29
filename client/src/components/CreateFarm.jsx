@@ -11,14 +11,13 @@ const Wrapper = styled.div`
 const Div = styled.div`
 	font-size: 1.5rem;
 	text-align: center;
-	margin-bottom: 5%;
 `;
 
 const CreateFarm = ({ farmData }) => {
 	return (
 		<Wrapper>
 			<Div>
-				농장이 없습니다.
+				농장이 없습니다
 				<br />
 				새로 등록해주세요.
 			</Div>

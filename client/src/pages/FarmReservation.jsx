@@ -5,8 +5,7 @@ import FarmReservationTable from '../components/FarmReservationTable';
 
 const Tittle = styled.h2`
 	text-align: center;
-	margin-top: 7%;
-	margin-bottom: 3%;
+	margin-bottom: 2%;
 `;
 
 const FarmReservation = () => {

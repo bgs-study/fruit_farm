@@ -7,31 +7,35 @@ import { useDispatch, useSelector } from 'react-redux';
 import { showModal } from '../store/ModalSlice';
 import Moment from 'moment';
 import * as API from '../lib/userApi';
-import { StatusSelect, NormalButton } from '../styles/Styled';
-import { yellow } from '../global-variables';
+import { StatusSelect, ConfirmButton } from '../styles/Styled';
 
 const Subject = styled.h2`
 	text-align: center;
-	margin-top: 7%;
-	margin-bottom: 3%;
+	margin-bottom: 2%;
 `;
 
 const DateSelect = styled(StatusSelect)`
 	margin-bottom: 3%;
+`;
+const ReviewWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 `;
 
 const ReviewBox = styled.div`
 	display: flex;
 	position: relative;
 	flex-direction: column;
-	margin-bottom: 3%;
-	border: solid 1px ${yellow};
+	margin-bottom: 1%;
+	border: solid 1px lightgray;
 	border-radius: 10px;
-	width: 100%;
+	width: 60%;
 	padding: 1rem;
 `;
 
 const InfoWrapper = styled.div``;
+
 const Info = styled.p``;
 
 const InfoText = styled.p`
@@ -44,7 +48,7 @@ const InfoText = styled.p`
 
 const InfoTextInMadal = styled.div``;
 
-const Button = styled(NormalButton)`
+const Button = styled(ConfirmButton)`
 	position: absolute;
 	top: 1rem;
 	right: 1rem;
@@ -53,12 +57,12 @@ const Button = styled(NormalButton)`
 const SelectWrapper = styled.div`
 	display: flex;
 	justify-content: flex-end;
+	width: 60%;
 `;
 
 const P = styled.p`
-	text-align: center;
+	margin-top: 3rem;
 `;
-
 const FarmReview = () => {
 	const dispatch = useDispatch();
 	const modalOpen = useSelector((state) => state.modal.modal);
@@ -66,6 +70,7 @@ const FarmReview = () => {
 	const [filteredData, setFilteredData] = useState(null);
 	const [selectedDate, setSelectedDate] = useState('지난 3개월');
 	const [modalData, setModalData] = useState(null);
+	const [message, setMessage] = useState('');
 
 	const fetchData = async () => {
 		try {
@@ -88,6 +93,7 @@ const FarmReview = () => {
 			});
 		} catch (err) {
 			console.error(err.response.data.message);
+			setMessage(err.response.data.message);
 		}
 	};
 
@@ -110,7 +116,6 @@ const FarmReview = () => {
 					Moment().subtract(1, 'years').format('YYYY-MM-DD') < obj.createDate,
 			);
 		}
-
 		setFilteredData(filteredData);
 	};
 
@@ -119,32 +124,6 @@ const FarmReview = () => {
 			filteredData.filter((obj) => obj.id === parseInt(e.target.name))[0],
 		);
 		dispatch(showModal());
-	};
-
-	const showData = (filteredData) => {
-		if (filteredData.length > 0) {
-			filteredData.map((review) => {
-				return (
-					<ReviewBox key={review.id}>
-						<InfoWrapper>
-							<Info>
-								<b>작성일:</b> {review.createDate}
-							</Info>
-							<Info>
-								<b>예약일:</b> {review.date}
-							</Info>
-							<Info>
-								<b>인원:</b> {review.people}
-							</Info>
-						</InfoWrapper>
-						<InfoText>{review.content}</InfoText>
-						<Button name={review.id} onClick={(e) => onClickBtn(e)}>
-							더보기
-						</Button>
-					</ReviewBox>
-				);
-			});
-		} else return <P>작성된 후기가 없습니다.</P>;
 	};
 
 	useEffect(() => {
@@ -159,16 +138,42 @@ const FarmReview = () => {
 		<>
 			<FarmFormat>
 				<Subject>후기 관리</Subject>
-				<SelectWrapper>
-					<DateSelect onChange={(e) => setSelectedDate(e.target.value)}>
-						<option value="지난 3개월">지난 3개월</option>
-						<option value="지난 6개월">지난 6개월</option>
-						<option value="지난 1년">지난 1년</option>
-					</DateSelect>
-				</SelectWrapper>
-				{filteredData && showData(filteredData)}
+				<ReviewWrapper>
+					{filteredData && (
+						<SelectWrapper>
+							<DateSelect onChange={(e) => setSelectedDate(e.target.value)}>
+								<option value="지난 3개월">지난 3개월</option>
+								<option value="지난 6개월">지난 6개월</option>
+								<option value="지난 1년">지난 1년</option>
+							</DateSelect>
+						</SelectWrapper>
+					)}
+					{filteredData &&
+						filteredData.map((review) => {
+							return (
+								<ReviewBox key={review.id}>
+									<InfoWrapper>
+										<Info>
+											<b>작성일:</b> {review.createDate}
+										</Info>
+										<Info>
+											<b>예약일:</b> {review.date}
+										</Info>
+										<Info>
+											<b>인원:</b> {review.people}
+										</Info>
+									</InfoWrapper>
+									<InfoText>{review.content}</InfoText>
+									<Button name={review.id} onClick={(e) => onClickBtn(e)}>
+										더보기
+									</Button>
+								</ReviewBox>
+							);
+						})}
+					<P>{message}</P>
+				</ReviewWrapper>
 				{modalOpen && (
-					<ModalContainer>
+					<ModalContainer w="30%" h="50%">
 						<InfoWrapper>
 							<Info>
 								<b>작성일:</b> {modalData.createDate}

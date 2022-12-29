@@ -8,25 +8,19 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { loginformSchema } from '../hooks/useForm';
 import { SubmitButton, Input } from '../styles/Styled';
 
-const LoginWrapper = styled.div`
-	padding: 10%;
-`;
-
 const Title = styled.h1`
 	text-align: center;
 	font-size: 2rem;
 	font-weight: bold;
 	position: relative;
-	margin-bottom: 2%;
 `;
 
 const InputForm = styled.form`
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	align-items: center;
-	margin: 40px auto;
-	width: 320px;
+	width: 100%;
+	margin-top: 3%;
 `;
 
 const InputWrapper = styled.div`
@@ -54,14 +48,21 @@ const ButtonWrapper = styled.div`
 
 const SubmitBtn = styled(SubmitButton)`
 	padding: 1rem 1rem;
+	width: 10rem;
 `;
 
 const Line = styled.div`
 	display: block;
-	width: 100%;
+	width: 500px;
 	height: 0.5px;
 	background-color: #b1b0ac;
-	margin: 5% 0;
+	margin: 3% 0 1% 0;
+`;
+
+const LinkDiv = styled.div`
+	width: 500px;
+	display: flex;
+	justify-content: flex-end;
 `;
 
 function Login() {
@@ -105,7 +106,7 @@ function Login() {
 	};
 
 	return (
-		<LoginWrapper>
+		<>
 			<Title>로그인</Title>
 			<InputForm>
 				<InputWrapper>
@@ -143,10 +144,12 @@ function Login() {
 						농장주 로그인
 					</SubmitBtn>
 				</ButtonWrapper>
+				<Line />
+				<LinkDiv>
+					<Link to="/register">회원가입하기</Link>
+				</LinkDiv>
 			</InputForm>
-			<Line />
-			<Link to="/register">회원가입하기</Link>
-		</LoginWrapper>
+		</>
 	);
 }
 

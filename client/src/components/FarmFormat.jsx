@@ -13,7 +13,7 @@ const FarmNav = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
-	height: 70vh;
+	height: 100%;
 	width: 30%;
 	max-width: 150px;
 	min-width: 150px;
