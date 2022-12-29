@@ -10,7 +10,7 @@ import * as userApi from '../lib/userApi';
 import ModalContainer from './../components/Modal';
 import { showModal, closeModal } from '../store/ModalSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { HOST, yellow } from '../global-variables';
+import { yellow } from '../global-variables';
 import {
 	SubmitButton,
 	ConfirmButton,
@@ -285,7 +285,7 @@ const Payment = () => {
 
 	const getUserData = async () => {
 		try {
-			const res = await userApi.get(`${HOST}/api/myInfo`);
+			const res = await userApi.get(`/api/myInfo`);
 			const userData = await res.data;
 			setUserData({
 				name: userData.name,
@@ -303,7 +303,7 @@ const Payment = () => {
 
 	const postData = async (e) => {
 		try {
-			const reserData = await userApi.post(`${HOST}/api/reserve`, {
+			const reserData = await userApi.post(`/api/reserve`, {
 				total_price: payData.totalPrice,
 				payment: selected,
 				name: name,
@@ -328,7 +328,7 @@ const Payment = () => {
 
 	const getReserveData = async () => {
 		try {
-			const res = await userApi.get(`${HOST}/api/timetables/${payData.farmId}`);
+			const res = await userApi.get(`/api/timetables/${payData.farmId}`);
 			const resData = await res.data;
 			setResData(resData);
 			for (let i = 0; i < resData.length; i++) {
