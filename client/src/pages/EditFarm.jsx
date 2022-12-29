@@ -106,8 +106,6 @@ const EditFarm = () => {
 			});
 		}
 
-		console.log('전달데이터', { type, name, address });
-
 		try {
 			await axios(`/api/farms/${farmData.id}`, {
 				method: 'PATCH',
