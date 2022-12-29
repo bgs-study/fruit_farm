@@ -1,0 +1,24 @@
+[{
+    "date" : "2020-02-17",
+    "start_ime" :"11:00",
+    "end_time" : "13:00",
+    "price": 5000,
+    "personnel": 20
+},
+{
+
+    "date" : "2020-02-17",
+    "start_time" :"13:00",
+    "end_time" : "15:00",
+    "price": 5000,
+    "personnel": 20
+
+},
+{
+    "date" : "2020-02-17",
+    "start_time" :"15:00",
+    "end_time" : "17:00",
+    "price": 5000,
+    "personnel": 20
+}
+]

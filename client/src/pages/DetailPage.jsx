@@ -1,19 +1,23 @@
-import React, { useState, useEffect,createContext } from "react";
-import axios from 'axios';
+import { useState, useEffect,createContext } from "react";
+import axios from "axios";
 import Detail from "../components/Detail";
-import { Provider } from "react-redux";
-import  FormStore  from "../store/FormStore";
+import { useParams } from 'react-router-dom';
 
 export const DetailContext = createContext();
 
 const DetailPage =  () => {
-    const [detailData, setDetailData] = useState(null);
-
+    const [farmData, setFarmData] = useState(null);
+    const [reviewData, setreviewData] = useState(null);
+    const [farmerData, setFarmerData] = useState(null);
+    const [timeTable, setTimeTable] = useState(null);
+    const {id} = useParams();
+    
     const fetchData = async () => {
         try {
-            await axios.get('/detailData.json').then((res) => {
-                console.log(res.data);
-                setDetailData(res.data);
+            await axios.get(`/api/farms/${id}`).then((res) => {
+                setFarmData(res.data.data);
+                setreviewData(res.data.reviewInfo);
+                setFarmerData(res.data.farmer);                 
             });
         }
         catch(e){
@@ -21,17 +25,33 @@ const DetailPage =  () => {
         }
     }
 
+    const fetchTimeTable = async () =>{
+        if(farmerData){
+            try {
+                const {farmId} = farmerData;
+                await axios.get(`/api/timetables/${farmId}`).then((res) => {
+                    setTimeTable(res.data);
+                })
+            }
+            catch (e){
+                console.log(e);
+            }
+        }
+    }
+
     useEffect (() => {
         fetchData();
     }, []);
-    
+
+    useEffect (() => {
+        fetchTimeTable()
+    },[farmerData]);
+
     return (
         <div>
-            <Provider store={FormStore}>
-                <DetailContext.Provider value={ { detailData }}>
-                    <Detail />
-                </DetailContext.Provider>
-            </Provider>
+            <DetailContext.Provider value={ {farmData,reviewData,farmerData,timeTable}}>
+                <Detail />
+            </DetailContext.Provider>
         </div>
     );
 }

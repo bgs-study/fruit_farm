@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+
+
 .kakao_btn{
   background-image: url("../public/kakao_login_medium_wide.png");
   background-repeat: no-repeat;

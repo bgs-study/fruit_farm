@@ -2,7 +2,7 @@ import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
     html,body {
-      height: 100%;
+      height: 100vh;
     }
     
     html {
@@ -13,16 +13,20 @@ const GlobalStyle = createGlobalStyle`
     body {
         margin: 0;
         padding: 0;
+        font-family: 'Noto Sans KR', sans-serif;
     }
 
-  ul, li {
-    list-style: none;
-  }
+    ul, li {
+      list-style: none;
+    }
 
-  a {
-    text-decoration: none;
-    display: block;
-    color: #000;
+    a {
+      text-decoration: none;
+      display: block;
+      color: #000;
+      &:hover {
+        color: #000;
+    }
   }
 `
 export default GlobalStyle;

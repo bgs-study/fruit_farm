@@ -1,120 +1,156 @@
-import React,{useState,useEffect,useContext} from 'react';
-import { useDispatch, useSelector } from "react-redux";
-
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import Calender from "./ReactCalender";
-import Location from "./Location";
-import Review from "./Review";
-import TimeBtns from "./TimeBtns";
-import { DetailContext } from "../pages/DetailPage"
+import Calender from './ReactCalender';
+import Location from './Location';
+import Review from './Review';
+import TimeBtns from './TimeBtns';
+import { DetailContext } from '../pages/DetailPage';
 import FloatingForm from './FloatingForm';
+import Carousel from 'react-bootstrap/Carousel'
+import {StyledTitle, StyledParagraph, StyledSubTitle,ContentContainer} from '../styles/Styled'
+
+const DisplayFlex = styled.div`
+    display:flex;
+    flex-direction:column;
+`;
+const DetailContainer = styled(DisplayFlex)`
+    width:100%;
+    text-align: left;
+`;
+const Header = styled(DisplayFlex)`
+    display: block;
+    width : 100%;
+`;
+const CarouselImg = styled.img`
+    object-fit: cover;
+    height : 500px;
+`;
+const Title = styled(StyledTitle)`
+    margin-bottom: 1%;
+`;
+const Address = styled(StyledParagraph)`
+    margin:  1% 0 2%;
+`;
+const DetailContent = styled.div`
+    display: flex;
+`;
+const DetailPeriod = styled.div`
+    display: flex;
+    justify-content: flex-start;
+`;
+const DetailInform = styled.div`
+    display: block;
+    width: 100%;
+    flex: 3.5;
+`;
+const FloatingFormDiv = styled.div`
+    display : felx;
+    justify-content : flex-end;
+    flex: 1;
+`;
+const TimButtonContainer = styled(DisplayFlex)`
+    justify-content:center;
+    width : 30%;
+    margin-left : 3%;
+`;
 
 
-const DetailHeader = ({title,location}) =>{
-    return <div className="header">
-        <h1 className="title">{title}</h1>
-        <p>{location}</p>
-        <img src="" alt={`${title}이미지`}/>
-    </div>
-};
-
-const DetailGrade = ({grade})=>{
-    return <p>{grade}점 </p>
-};
-
-const DetailDescription = ({description})=>{
-    return <p>{description}</p>
-};
-
-
-const DetailCompany = ({company}) => {
+const DetailHeader = ({ name, address }) => {
     return (
-        <DetailCompanyContainer>
-            <p>업체정보</p>    
-            {
-                Object.entries(company).map((values,idx) => {
-                    return <p key={`idx${idx}-${values[0]}`}>{`${values[0]}`} : {`${values[1]}`}</p>
-                })
-            }
-        </DetailCompanyContainer>
+        <Header>
+            <Title>{name}</Title>
+            <Address>{address}</Address>
+        </Header>
     );
 };
 
+const DetailImg = ({imgUrl}) =>{
+    return (
+        <Carousel interval={2000}>
+        { 
+            imgUrl.split(',').map((url,idx) => {    
+                return (
+                    <Carousel.Item key={`${idx}slide`}>
+                        <CarouselImg
+                            className='d-block w-100'
+                            src={url}
+                            alt={`${idx}slide`}
+                        />
+                    </Carousel.Item>
+                )
+            })
+        }
+        </Carousel>
+    )
+};
 
+const DetailDescription = ({ description }) => {
+    return (
+        <ContentContainer>
+            <StyledSubTitle>체험소개</StyledSubTitle>
+            <hr />
+            <div>
+                <StyledParagraph>{description}</StyledParagraph>
+            </div>
+        </ContentContainer>
+    )
+};
 
-const Detail = () => {
-    const [formData,setFormData] = useState({})
-    const {detailData : data} = useContext(DetailContext);
-
-    const getDataFuntion = (value) => {
-        console.log(value);
-    };
-
-    useEffect(() => {
-        console.log(formData);
-    },[formData]);
-
+const DetailCompany = ({farm,farmer}) => {
+    const phoneNum = farmer.phoneNum;
     return (
         <>
-            { 
-                data &&
-                <DetailContainer key={`${data.title}-${new Date()}`}>
-                    <DetailHeader title={data.title} location={data.location} />
-                
-                    <DetailContent>
-                        <DetailInform>
-                            <DetailGrade grade={data.grade} />
-                            <DetailDescription description={data.description} />
-                            <DetailPeriod>
-                                <div className="calender"><Calender propFunction={getDataFuntion}/></div>
-                                <TimButtonContainer>
-                                    <TimeBtns  />
-                                </TimButtonContainer>
-                            </DetailPeriod>
-                            <Review />
-                            <Location />
-                            <DetailCompany company={data.company} />
-                        </DetailInform>
-                        <FloatingForm />
-                    </DetailContent>
-
-                </DetailContainer>
-            } 
+            <StyledSubTitle>농장정보</StyledSubTitle>
+            <hr />
+            <div>
+                <StyledParagraph>농장명 : {farm.name}</StyledParagraph>
+                <StyledParagraph>농장상품 : {farm.type}</StyledParagraph>
+                <StyledParagraph>농장주 : {farm.owner}</StyledParagraph>
+                <StyledParagraph>E-mail : {farmer.email}</StyledParagraph>
+                <StyledParagraph>전화번호: {phoneNum.slice(0,3)}-{phoneNum.slice(3,7)}-{phoneNum.slice(7,)}</StyledParagraph>
+            </div>
         </>
     );
 };
 
+const DetailSchedule = () =>{
+    return (
+        <ContentContainer>
+            <StyledSubTitle>체험일정</StyledSubTitle>
+            <hr />
+            <DetailPeriod>
+                <Calender />
+                <TimButtonContainer>
+                    <TimeBtns />
+                </TimButtonContainer>
+            </DetailPeriod>
+        </ContentContainer>
+    )
+}
 
-const DetailContainer = styled.div`
-    display:flex;
-    flex-direction:column;
-    text-align: left;
-    .header .title{
-        display:flex;
-        width:100%;
-    }
-`;
-const DetailContent = styled.div`
-    display:flex;
-`;
-
-const DetailPeriod = styled(DetailContent)`
-    justify-content: flex-start;
-    .calender:first-child{
-        margin-right:3%;
-    }
-`;
-const DetailInform = styled.div`
-    width: 100%;
-    margin-right : 3%;
-`;
-const DetailCompanyContainer = styled.div`
-    border : 1px solid black;
-`;
-const TimButtonContainer = styled.div`
-    display:flex;
-    flex-direction: column;
-    justify-content:center;
-`;
+const Detail = () => {
+    const { farmData : farm, farmerData : farmer } = useContext(DetailContext);
+    return (
+        <>
+            {
+                farm &&
+                <DetailContainer key={`${farm.name}-${new Date()}`}>
+                    <DetailHeader name={farm.name} address={farm.address} />
+                    <DetailImg imgUrl={farm.url} />
+                    <DetailContent>
+                        <DetailInform>
+                            <DetailDescription description={farm.description} />
+                            <DetailSchedule />
+                            <Review />
+                            <Location />
+                            <DetailCompany farm={farm} farmer={farmer}/>
+                        </DetailInform>
+                        <FloatingFormDiv><FloatingForm /></FloatingFormDiv>
+                    </DetailContent>
+                </DetailContainer>
+            }
+        </>
+    );
+};
 
 export default Detail;

@@ -1,7 +1,7 @@
 {
   "title": "단감 따기 체험",
   "img": "alt",
-  "location" : "Geoje-myeon, Geoje-si, 경상남도, 한국", 
+  "location" : "전라북도 고창군 고수면 남산농장길 34-4", 
   "description": "단감따기 체험입니다. 함께 즐겨요",
   "grade": "4.5",
   "price": 7000,
@@ -10,7 +10,7 @@
   {
       "id": "userId1",
       "name":"username1",
-      "content":"이것은 리뷰1입니다."
+      "content":"이것은 리뷰1입니다.이것은 리뷰1입니다.이것은 리뷰1입니다.이것은 리뷰1입니다.이것은 리뷰1입니다.이것은 리뷰1입니다.이것은 리뷰1입니다.이것은 리뷰1입니다.이것은 리뷰1입니다.이것은 리뷰1입니다.이것은 리뷰1입니다.이것은 리뷰1입니다.이것은 리뷰1입니다.이것은 리뷰1입니다.이것은 리뷰1입니다."
   },
   {
       "id" :"userId2",
@@ -37,6 +37,16 @@
   "name":"username2",
   "content" : "이것은 리뷰2입니다."
 } ,
+{
+  "id" :"userId7",
+  "name":"username2",
+  "content" : "이것은 리뷰2입니다."
+},
+{
+  "id" :"userId7",
+  "name":"username2",
+  "content" : "이것은 리뷰2입니다."
+},
 {
   "id" :"userId7",
   "name":"username2",

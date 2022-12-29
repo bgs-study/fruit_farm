@@ -1,39 +1,54 @@
 import styled from 'styled-components';
+import {AiOutlineCustomerService} from 'react-icons/ai';
 
 const StyledContainer = styled.footer`
-    position:sticky;
+    position:fixed;
     bottom:0;
     font-size: 1rem;
-    border-top: 1px solid lightgray;
     width: 100%;
-    padding: 2% 5%;
+    padding: 1.2rem 5.5rem;
     background-color:#fff;
-    height: 100%;
-    z-index: 99;
+    z-index: 80;
+    border-top:1px solid #f4d815;
 `;
 
 const StyledFooter= styled.div`
     display:flex;
+    justify-content: space-between;
+    align-items: center;
 `
 
-const StyledFooterMenu = styled.a`
+const StyledFooterMenu = styled.div`
  &:not(:last-of-type) {
     padding-right: 2%;
   }
- font-size: 0.9rem;
+
+  > p {
+    margin-bottom: 0rem;
+  }
+ 
+ > span {
+    color: gray;
+    font-size: 0.8rem;
+ }
+
 `
 
-const Footer = () => {
+const Footer = (() => {
     return (
         <StyledContainer>
             <StyledFooter>
-                <StyledFooterMenu href="#">이용약관</StyledFooterMenu>
-                <StyledFooterMenu href="#">개인정보처리방침</StyledFooterMenu>
-                <StyledFooterMenu href="#">고객센터</StyledFooterMenu>
-                <StyledFooterMenu href="#">사이트 소개</StyledFooterMenu>
+                <StyledFooterMenu>
+                <p>COPYRIGHT (C) NADODDAM ALL RIGHTS RESERVED.</p>
+                </StyledFooterMenu>
+                <StyledFooterMenu>
+                <span>주식회사 나도땀 (NADODDAM Co., Ltd.) | </span> 
+                <span>서울특별시 성동구 엘리스로 1길, 1층 (성수동, 낙낙) | </span> 
+                <span>대표 : 넘버원</span>
+                </StyledFooterMenu>
             </StyledFooter>
         </StyledContainer>
     )
-}
+});
 
 export default Footer;

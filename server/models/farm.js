@@ -1,98 +1,87 @@
 import Sequelize from 'sequelize';
+import db from './index.js';
 const Op = Sequelize.Op;
 
-import db from '../models/index.js';
-
 const Farms = (sequelize, DataTypes) => {
-  const Farms = sequelize.define(
-    'Farms',
-    {
-      farm_id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true,
-      },
-      type: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      address: {
-        type: DataTypes.STRING(64),
-        allowNull: false,
-      },
-      description: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        defaultValue: '설명 없음',
-      },
-      owner: {
-        type: DataTypes.STRING(32),
-        allowNull: false,
-      },
-    },
-    {
-      charset: 'utf8',
-      collate: 'utf8_general_ci', //한글 저장
-      tableName: 'Farms',
-      timestamps: true,
-    }
-  );
+	const farm = sequelize.define(
+		'farm',
+		{
+			type: {
+				type: DataTypes.STRING,
+				allowNull: false,
+			},
+			name: {
+				type: DataTypes.STRING,
+				allowNull: false,
+			},
+			address: {
+				type: DataTypes.STRING,
+				allowNull: false,
+			},
+			description: {
+				type: DataTypes.TEXT,
+				allowNull: false,
+				defaultValue: '설명 없음',
+			},
+			owner: {
+				type: DataTypes.STRING,
+				allowNull: false,
+			},
+			url: {
+				type: DataTypes.STRING(1234),
+				allowNull: false,
+			},
+		},
+		{
+			charset: 'utf8',
+			collate: 'utf8_general_ci',
+		},
+	);
 
-  // Farms.associate = (db) => {
-  //   db.Farms.belongsTo(db.Users, {
-  //     foreignKey: 'user_id',
-  //     targetKey: 'id',
-  //   });
-  // };
+	farm.findById = (id) => {
+		return farm.findByPk(id);
+	};
 
-  Farms.findById = (id) => {
-    return db.Users.findByPk(id).then((data) => {
-      return data.dataValues.id;
-    });
-  };
+	farm.getAll = (lastId, limit) => {
+		let cursor = lastId || 0;
+		return farm.findAll({
+			limit: parseInt(limit),
+			where: {
+				id: {
+					[DataTypes.Op.gt]: cursor,
+				},
+			},
+			order: [['createdAt', 'DESC']],
+		});
+	};
 
-  Farms.getAll = () => {
-    return Farms.findAll();
-  };
+	farm.getByType = (type) => {
+		return farm.findAll({ where: { type } });
+	};
 
-  Farms.getByType = (type) => {
-    return Farms.findAll({ where: { type } });
-  };
+	farm.getByAddress = (location) => {
+		return farm.findAll({
+			where: {
+				address: {
+					[Op.like]: '%' + location + '%',
+				},
+			},
+		});
+	};
 
-  Farms.getByAddress = (address) => {
-    return Farms.findAll({
-      where: {
-        address: {
-          [Op.like]: '%' + address + '%',
-        },
-      },
-    });
-  };
+	farm.updateFarm = (id, updateInfo) => {
+		return farm.update(updateInfo, { where: { id } });
+	};
 
-  // Farms.update = (id, type, name, address, description, owner) => {
-  //   return Farms.findByPk(id).then((data) => {
-  //     return (
-  //       (data.type = type),
-  //       (data.name = name),
-  //       (data.address = address),
-  //       (data.description = description),
-  //       (data.owner = owner)
-  //     );
-  //   });
-  // };
+	farm.createFarm = (farmInfo) => {
+		return farm.create(farmInfo);
+	};
 
-  Farms.create = (farmInfo) => {
-    return Farms.create(farmInfo).then((data) => {
-      return data;
-    });
-  };
+	farm.remove = (id) => {
+		return farm.findByPk(id).then((farm) => farm.destroy());
+	};
 
-  return Farms;
+	return farm;
 };
 
 export default Farms;
