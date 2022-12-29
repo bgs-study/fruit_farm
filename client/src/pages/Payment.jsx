@@ -10,7 +10,7 @@ import * as userApi from '../lib/userApi';
 import ModalContainer from './../components/Modal';
 import { showModal, closeModal } from '../store/ModalSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { HOST, yellow, green } from '../global-variables';
+import { HOST, yellow } from '../global-variables';
 import {
 	SubmitButton,
 	ConfirmButton,
@@ -18,6 +18,8 @@ import {
 	Input,
 	NormalButton,
 	StyledTitle,
+	StyledSubTitle,
+	StyledParagraph,
 } from '../styles/Styled';
 
 const MomDiv = styled.div`
@@ -44,7 +46,7 @@ const H2 = styled.p`
 `;
 
 const SmallH2 = styled.p`
-	font-size: 25px;
+	font-size: 1.5rem;
 	font-weight: 700;
 	margin-bottom: 20px;
 `;
@@ -94,9 +96,6 @@ const TextDiv = styled.div`
 const RowDiv = styled.div`
 	display: flex;
 	flex-direction: row;
-	div {
-		margin-top: 5px;
-	}
 `;
 
 const Box = styled.div`
@@ -128,6 +127,7 @@ const ModalDiv = styled.div`
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	margin-top: 1rem;
 `;
 const NormalBtn = styled(NormalButton)`
 	width: 110px;
@@ -150,19 +150,19 @@ const ReservationInfo = ({ payData }) => {
 		<>
 			{payData && (
 				<>
-					<H1>예약 정보</H1>
+					<StyledTitle>예약 정보</StyledTitle>
 					<TextDiv>
-						<H2>날짜</H2>
+						<StyledSubTitle>날짜</StyledSubTitle>
 						<ImportInfo>{payData.date}</ImportInfo>
 					</TextDiv>
 					<TextDiv>
-						<H2>시간</H2>
+						<StyledSubTitle>시간</StyledSubTitle>
 						<ImportInfo>
 							{payData.startTime} ~ {payData.endTime}
 						</ImportInfo>
 					</TextDiv>
 					<TextDiv>
-						<H2>인원</H2>
+						<StyledSubTitle>인원</StyledSubTitle>
 						<ImportInfo>{payData.headCount}명</ImportInfo>
 					</TextDiv>
 					<ButtonDiv>
@@ -183,23 +183,23 @@ const SideBar = ({ payData }) => {
 		<>
 			{payData && (
 				<div>
-					<H1>{farm}</H1>
+					<StyledTitle>{farm}</StyledTitle>
 					<SmallH2>요금 세부정보</SmallH2>
-					<ImportInfo>1인 체험권</ImportInfo>
+					<StyledSubTitle>1인 체험권</StyledSubTitle>
 					<TextDiv>
-						<ImportInfo>
+						<StyledSubTitle>
 							{price ? price.toLocaleString('ko-KR') : 0}원 X{headCount}
-						</ImportInfo>
-						<ImportInfo>
+						</StyledSubTitle>
+						<StyledSubTitle>
 							{totalPrice ? totalPrice.toLocaleString('ko-KR') : 0}원
-						</ImportInfo>
+						</StyledSubTitle>
 					</TextDiv>
 					<Line />
 					<TextDiv>
-						<ImportInfo>결제 예정 금액</ImportInfo>
-						<ImportInfo>
+						<StyledSubTitle>결제 예정 금액</StyledSubTitle>
+						<StyledSubTitle>
 							{totalPrice ? totalPrice.toLocaleString('ko-KR') : 0}원
-						</ImportInfo>
+						</StyledSubTitle>
 					</TextDiv>
 				</div>
 			)}
@@ -214,21 +214,21 @@ const PaymentInfo = () => {
 			<Accordion style={{ width: '100%', justifyContent: 'center' }}>
 				<Accordion.Item eventKey="0">
 					<Accordion.Header>
-						<H2>정보제공 수집 및 제공 동의</H2>
+						<StyledSubTitle>정보제공 수집 및 제공 동의</StyledSubTitle>
 					</Accordion.Header>
 					<Accordion.Body>
-						<Span>
+						<StyledParagraph>
 							예약 서비스 이용을 위한 개인정보 수집 및 제3자 제공, 취소/환불
 							규정에 동의합니다.
-						</Span>
+						</StyledParagraph>
 					</Accordion.Body>
 				</Accordion.Item>
 				<Accordion.Item eventKey="1">
 					<Accordion.Header>
-						<H2>환불 정책 동의</H2>
+						<StyledSubTitle>환불 정책 동의</StyledSubTitle>
 					</Accordion.Header>
 					<Accordion.Body>
-						<Span>
+						<StyledParagraph>
 							체험 특성상 7일 전부터 취소가 불가합니다.그 이후에는 취소 시점에
 							따라 환불액이 결정됩니다.
 							<br />
@@ -239,16 +239,18 @@ const PaymentInfo = () => {
 							예약일로부터 3일 전 : 50% 환불
 							<br />
 							예약일로부터 1일 전 : 환불 불가
-						</Span>
+						</StyledParagraph>
 					</Accordion.Body>
 				</Accordion.Item>
 			</Accordion>
 			<Line />
 			<RowDiv>
 				<div>
-					<RiErrorWarningLine size="25" />
+					<RiErrorWarningLine size="20" />
 				</div>
-				<Span>주문 내용을 확인하였으며, 위 내용에 동의합니다.</Span>
+				<StyledParagraph>
+					주문 내용을 확인하였으며, 위 내용에 동의합니다.
+				</StyledParagraph>
 			</RowDiv>
 		</>
 	);
@@ -357,7 +359,7 @@ const Payment = () => {
 						<ReservationInfo payData={payData}></ReservationInfo>
 					</Box>
 					<Box>
-						<H1>예약자 정보</H1>
+						<StyledTitle>예약자 정보</StyledTitle>
 						<H2>예약자</H2>
 						<TextDiv>
 							{nameOpen ? (
@@ -367,7 +369,7 @@ const Payment = () => {
 									onChange={(e) => setName(e.target.value)}
 								/>
 							) : (
-								<ImportInfo>{name}</ImportInfo>
+								<StyledSubTitle>{name}</StyledSubTitle>
 							)}
 							{nameOpen ? (
 								<ConfirmBtn onClick={() => setNameOpen(!nameOpen)}>
@@ -388,7 +390,7 @@ const Payment = () => {
 									onChange={(e) => setPhoneNumber(e.target.value)}
 								/>
 							) : (
-								<ImportInfo>{phoneNumber}</ImportInfo>
+								<StyledSubTitle>{phoneNumber}</StyledSubTitle>
 							)}
 							{phoneNumberOpen ? (
 								<ConfirmBtn
@@ -413,7 +415,7 @@ const Payment = () => {
 									onChange={(e) => setEmail(e.target.value)}
 								/>
 							) : (
-								<ImportInfo>{email}</ImportInfo>
+								<StyledSubTitle>{email}</StyledSubTitle>
 							)}
 							{emailOpen ? (
 								<ConfirmBtn onClick={() => setEmailOpen(!emailOpen)}>
@@ -427,16 +429,16 @@ const Payment = () => {
 						</TextDiv>
 						<RowDiv>
 							<div>
-								<RiErrorWarningLine size="25" />
+								<RiErrorWarningLine size="20" />
 							</div>
-							<Span>
+							<StyledParagraph>
 								입력하신 예약자 정보로 결제 및 예약관련 정보가 발송됩니다.
-							</Span>
+							</StyledParagraph>
 						</RowDiv>
 					</Box>
 					<Box>
 						<TextDiv>
-							<H1>결제 수단</H1>
+							<StyledTitle>결제 수단</StyledTitle>
 							<Form.Select
 								size="lg"
 								onChange={handleSelect}
@@ -463,7 +465,7 @@ const Payment = () => {
 					</SideBarDiv>
 				</StickyBox>
 				{modalOpen && (
-					<ModalContainer w="600px" h="330px">
+					<ModalContainer w="600px" h="350px">
 						{pay ? (
 							<ModalDiv>
 								<ModalH1>결제완료</ModalH1>

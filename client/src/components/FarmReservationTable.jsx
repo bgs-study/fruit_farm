@@ -1,39 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Pagination from './Pagination';
 import * as API from '../lib/userApi';
+import {
+	ConfirmButton,
+	StyledSubTitle,
+	StatusButton,
+	StatusSelect,
+} from '../styles/Styled';
 
+const MainDiv = styled.div`
+	display: flex;
+	flex-direction: column;
+	min-width: 760px;
+`;
 const FilterWrapper = styled.div`
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 	margin-bottom: 20px;
-`;
-
-const FilterBtn = styled.button`
-	width: 5rem;
-	margin-right: 0.5rem;
-	font-size: 0.8rem;
-`;
-
-const FilterSelect = styled.select`
-	margin-left: auto;
 `;
 
 const Table = styled.table`
 	width: 100%;
 	border: 1px solid black;
 	border-collapse: collapse;
+	box-shadow: 5px 5px 5px grey;
 `;
 
 const Thead = styled.thead``;
 
 const Tr = styled.tr`
-	border: 1px solid black;
+	border: 1px solid #777;
 	padding: 10px;
 `;
 const Td = styled.td`
-	border: 1px solid black;
+	height: 100%;
+	border: 1px solid #777;
 	padding: 10px;
+	font-size: 16px;
 `;
 
 const BtnTd = styled.td`
@@ -41,14 +46,42 @@ const BtnTd = styled.td`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: space-around;
+	justify-content: space-between;
+	div {
+		margin: 5px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
 `;
-
-const Button = styled.button``;
 
 const FailAnnouncement = styled.p`
 	text-align: center;
 	margin-top: 5rem;
+`;
+
+const StyledStatusLabel = styled.span`
+	border: none;
+	background: #83d644;
+	border-radius: 10px;
+	padding: 0.3rem 0.5rem;
+	color: #fff;
+	font-size: 1rem;
+
+	${(props) =>
+		props.marginTop &&
+		css`
+			margin: 0.5rem 0 0 0;
+		`}
+`;
+
+const DeleteButton = styled.button`
+	border: 1px solid red;
+	border-radius: 10px;
+	color: red;
+	font-weight: 500;
+	background-color: rgba(255, 0, 0, 0.18);
+	margin: 0px;
 `;
 
 const FarmReservationTable = ({}) => {
@@ -150,85 +183,113 @@ const FarmReservationTable = ({}) => {
 	if (filteredData) {
 		return (
 			<>
-				<FilterWrapper>
-					{statusList.map((status) => (
-						<FilterBtn key={status} onClick={() => setStatusOption(status)}>
-							{status}
-						</FilterBtn>
-					))}
-					<FilterSelect onChange={(e) => setDateOption(e.target.value)}>
-						<option value="최근순">최근순</option>
-						<option value="오래된순">오래된순</option>
-					</FilterSelect>
-				</FilterWrapper>
-				<Table>
-					<Thead>
-						<Tr>
-							<Td scope="col">예약날짜</Td>
-							<Td scope="col">예약번호</Td>
-							<Td scope="col">예약자</Td>
-							<Td scope="col">예약정보</Td>
-							<Td scope="col">결제</Td>
-							<Td scope="col">예약상태</Td>
-						</Tr>
-					</Thead>
-					<tbody>
-						{filteredData.slice(offset, offset + 10).map((oneReservation) => {
-							const { time, reserve } = oneReservation;
-							return (
-								<Tr key={reserve.id}>
-									<Td>{reserve.createdAt.slice(0, 10)}</Td>
-									<Td>{reserve.id}</Td>
-									<Td>
-										{reserve.name}
-										<br />
-										{reserve.email}
-										<br />
-										{reserve.phoneNum}
-									</Td>
-									<Td>
-										{time.date}
-										<br />
-										{`${time.start_time} - ${time.end_time}`}
-										<br />
-										인원: {time.people}명
-									</Td>
-									<Td>
-										{reserve.total_price.toLocaleString('ko-KR')}원<br />
-										{reserve.payment === 'card' && '카드결제'}
-										{reserve.payment === 'transfer' && '계좌이체'}
-									</Td>
-									<BtnTd>
-										{reserve.status}
-										{reserve.status === '예약대기' && (
-											<Button
-												name={reserve.id}
-												onClick={(e) => onClickRezConfirm(e)}
-											>
-												예약확정
-											</Button>
-										)}
-										{(reserve.status === '예약대기' ||
-											reserve.status === '예약완료') && (
-											<Button
-												name={reserve.id}
-												onClick={(e) => onClickRezCancel(e)}
-											>
-												예약취소
-											</Button>
-										)}
-									</BtnTd>
-								</Tr>
-							);
-						})}
-					</tbody>
-				</Table>
-				<Pagination
-					total={filteredData.length}
-					limit={10}
-					page={page}
-					setPage={setPage}
-				/>
+				<MainDiv>
+					<FilterWrapper>
+						<div>
+							{statusList.map((status) => (
+								<StatusButton
+									key={status}
+									onClick={() => setStatusOption(status)}
+									clicked={statusOption === status ? true : false}
+								>
+									{status}
+								</StatusButton>
+							))}
+						</div>
+						<div>
+							<StatusSelect onChange={(e) => setDateOption(e.target.value)}>
+								<option value="최근순">최근순</option>
+								<option value="오래된순">오래된순</option>
+							</StatusSelect>
+						</div>
+					</FilterWrapper>
+					<Table>
+						<Thead>
+							<Tr>
+								<Td scope="col">
+									<StyledSubTitle>예약날짜</StyledSubTitle>
+								</Td>
+								<Td scope="col">
+									<StyledSubTitle>예약번호</StyledSubTitle>
+								</Td>
+								<Td scope="col">
+									<StyledSubTitle>예약자</StyledSubTitle>
+								</Td>
+								<Td scope="col">
+									<StyledSubTitle>예약정보</StyledSubTitle>
+								</Td>
+								<Td scope="col">
+									<StyledSubTitle>결제</StyledSubTitle>
+								</Td>
+								<Td scope="col">
+									<StyledSubTitle>예약상태</StyledSubTitle>
+								</Td>
+							</Tr>
+						</Thead>
+						<tbody>
+							{filteredData.slice(offset, offset + 10).map((oneReservation) => {
+								const { time, reserve } = oneReservation;
+								return (
+									<Tr key={reserve.id}>
+										<Td>{reserve.createdAt.slice(0, 10)}</Td>
+										<Td>{reserve.id}</Td>
+										<Td>
+											{reserve.name}
+											<br />
+											{reserve.email}
+											<br />
+											{reserve.phoneNum}
+										</Td>
+										<Td>
+											{time.date}
+											<br />
+											{`${time.start_time} - ${time.end_time}`}
+											<br />
+											인원: {time.people}명
+										</Td>
+										<Td>
+											{reserve.total_price.toLocaleString('ko-KR')}원<br />
+											{reserve.payment === 'card' && '카드결제'}
+											{reserve.payment === 'transfer' && '계좌이체'}
+										</Td>
+										<BtnTd>
+											<div>
+												<StyledStatusLabel>{reserve.status}</StyledStatusLabel>
+											</div>
+											<div>
+												{reserve.status === '예약대기' && (
+													<ConfirmButton
+														name={reserve.id}
+														onClick={(e) => onClickRezConfirm(e)}
+													>
+														예약확정
+													</ConfirmButton>
+												)}
+											</div>
+											<div>
+												{(reserve.status === '예약대기' ||
+													reserve.status === '예약완료') && (
+													<DeleteButton
+														name={reserve.id}
+														onClick={(e) => onClickRezCancel(e)}
+													>
+														예약취소
+													</DeleteButton>
+												)}
+											</div>
+										</BtnTd>
+									</Tr>
+								);
+							})}
+						</tbody>
+					</Table>
+					<Pagination
+						total={filteredData.length}
+						limit={10}
+						page={page}
+						setPage={setPage}
+					/>
+				</MainDiv>
 			</>
 		);
 	} else {
