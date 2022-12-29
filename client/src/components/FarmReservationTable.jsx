@@ -230,7 +230,7 @@ const FarmReservationTable = ({}) => {
 											<br />
 											{`${time.start_time} - ${time.end_time}`}
 											<br />
-											인원: {time.people}명
+											인원: {reserve.personnel}명
 										</Td>
 										<Td>
 											{reserve.total_price.toLocaleString('ko-KR')}원<br />
