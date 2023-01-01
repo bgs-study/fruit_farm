@@ -70,7 +70,7 @@ const TimeBtns = () =>{
     },[timeBtnActive]);
 
     const handleTimeSelect = (e) => {
-        setTimeBtnActive(e.target.value); //index
+        setTimeBtnActive(e.target.value);
     };
 
     return ( 

@@ -137,7 +137,11 @@ img {
   height: 50px;
   margin-bottom: 20px;
 }
-`  
+`
+
+const ButtonWrap = styled.div`
+   text-align: center;
+`
 
 const initialState = {
   cancleModal: false,
@@ -387,13 +391,16 @@ const MyReservationTable = () => {
                       <p>{reserve.total_price.toLocaleString()}원</p>
                     </StyledPayWrap>
                 {(reserve.status === "예약완료" || reserve.status === "예약대기") && 
-                <SubmitButton 
-                  onClick={() => {
-                    modalDispatch(showModal());
-                    dispatch({type: 'CANCLE'})
-                  }}> 
-                    예약취소
-                </SubmitButton>}
+                <ButtonWrap>
+                  <SubmitButton 
+                    onClick={() => {
+                      modalDispatch(showModal());
+                      dispatch({type: 'CANCLE'})
+                    }}> 
+                      예약취소
+                  </SubmitButton>
+                </ButtonWrap>
+                }
             </div>)
         })}
       </>

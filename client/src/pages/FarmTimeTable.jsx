@@ -255,7 +255,7 @@ const TimeTable = ()=>{
                         return(
                             <TimeTableList key={idx}>
                                 <TimTableItem>
-                                    <FarmImg src={url} alt='농장이미지'></FarmImg>
+                                    <FarmImg src={url.split(",")[0]} alt='농장이미지'></FarmImg>
                                     <TimTableContent>
                                         <div>
                                             <span>날짜 : </span>

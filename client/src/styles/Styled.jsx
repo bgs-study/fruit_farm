@@ -159,7 +159,8 @@ export const StyledImageWrap = styled.div`
   }
 
   ${props => props.modalImg && css`
-  height: 72px;
+  width: 11rem;
+  height: 7rem;
 `}
 `
 //memo 지혜 : 페이지 wrapper

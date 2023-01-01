@@ -4,7 +4,6 @@ import {PageWrapper, PageBtn} from '../styles/Styled'
 
 const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, page, setPage, first, setFirst, last, setLast , lastId, setLastId}) => {
     const [btnActive, setBtnActive] = useState('');
-    const current = Math.ceil(timeTable.length/perpage) + pageCount * pageGroup; 
 
     const hadlePageBtn = (e,i) => {
         setPage(i);
@@ -13,7 +12,7 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
 
     const pageNum = () =>{
         let pageList = [];
-        
+
         for (let i = first; i <= last; i++) {
             pageList.push(
                 <PageBtn
@@ -30,17 +29,16 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
     };
 
     const handlePrevPage = () =>{
-        setFirst(first-pageCount); 
+        setFirst((first) => first - 4);
         setPageGroup(pageGroup - 1);
     }
 
-    const handleNextPage = () =>{
+    const handleNextPage = () =>{  
+        if( lastId.filter( id => id >= timeTable[0].id).length == 0 ){
+            setLastId([...lastId, timeTable[0].id]);
+        }
         setFirst(last + 1);  
         setPageGroup(pageGroup + 1);
-
-        if( lastId.filter( id => id >= timeTable[timeTable.length -1].id).length == 0 ){
-            setLastId([...lastId, timeTable[timeTable.length -1].id]);
-        }
     }
 
     useEffect(() =>{
@@ -48,12 +46,7 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
     },[]);
 
     useEffect(()=>{
-        if (current < last){
-            setLast(current);
-        }
-    },[last])
-
-    useEffect(()=>{
+        console.log((pageGroup + 1)*pageCount); 
         setLast((pageGroup + 1)*pageCount); 
     },[first,pageGroup]);
 
@@ -64,6 +57,13 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
     useEffect(()=>{ 
         setBtnActive(page);
     },[page])
+
+    useEffect(()=>{
+        const current = Math.ceil(timeTable.length/perpage) + pageCount * pageGroup; 
+        if(current <last){
+            setLast(current);
+        }
+    },[timeTable.length])
 
 	return (
 		<>

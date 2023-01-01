@@ -122,7 +122,7 @@ const Home = React.memo(() => {
           getFarmData(option, last);}
 			}}
 			hasMore={true}
-			scrollThreshold="1000px"
+			scrollThreshold="500px"
 		>
 			<FarmList
 				contents={contents}

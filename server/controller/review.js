@@ -159,6 +159,9 @@ export async function getReviewDataFarmer(req, res, next) {
 				reviews[i].reserve_id,
 			);
 			const timeInfo = await db.TimeTables.getById(data.time_id);
+			if(!timeInfo) {
+				throw new Error('해당 농장주는 조회되는 후기가 없습니다.')
+			}
 			reserveInfo.push({
 				date: timeInfo.date,
 				start_time: timeInfo.start_time,
