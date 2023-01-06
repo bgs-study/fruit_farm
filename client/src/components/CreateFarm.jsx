@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { SubmitButton } from '../styles/Styled';
@@ -13,7 +12,7 @@ const Div = styled.div`
 	text-align: center;
 `;
 
-const CreateFarm = ({ farmData }) => {
+const CreateFarm = () => {
 	return (
 		<Wrapper>
 			<Div>

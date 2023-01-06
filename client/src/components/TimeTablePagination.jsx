@@ -2,13 +2,10 @@ import React, { useEffect, useState } from 'react';
 import {PageWrapper, PageBtn} from '../styles/Styled'
 
 
-const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, page, setPage, first, setFirst, last, setLast , lastId, setLastId}) => {
+const Pagination = ( { timeTable, pageCount, perpage, pageGroup, setPageGroup, page, setPage, lastId, setLastId}) => {
+    const [first,setFirst] = useState(1);
+    const [last,setLast] = useState(1);
     const [btnActive, setBtnActive] = useState('');
-
-    const hadlePageBtn = (e,i) => {
-        setPage(i);
-        setBtnActive(e.target.value);
-    };
 
     const pageNum = () =>{
         let pageList = [];
@@ -27,12 +24,15 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
         }
         return pageList;
     };
-
+        
+    const hadlePageBtn = (e,i) => {
+        setPage(i);
+        setBtnActive(e.target.value);
+    };
     const handlePrevPage = () =>{
         setFirst((first) => first - 4);
         setPageGroup(pageGroup - 1);
     }
-
     const handleNextPage = () =>{  
         if( lastId.filter( id => id >= timeTable[0].id).length == 0 ){
             setLastId([...lastId, timeTable[0].id]);
@@ -46,7 +46,6 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
     },[]);
 
     useEffect(()=>{
-        console.log((pageGroup + 1)*pageCount); 
         setLast((pageGroup + 1)*pageCount); 
     },[first,pageGroup]);
 
@@ -80,7 +79,7 @@ const Pagination = ( {pageCount, pageGroup, setPageGroup, timeTable, perpage, pa
 				<PageBtn onClick={()=>setPage(page + 1)} disabled={page === last}>
 					&gt;
 				</PageBtn>
-                <PageBtn onClick={handleNextPage} disabled={timeTable.length < 20}>
+                <PageBtn onClick={handleNextPage} disabled={timeTable.length < perpage*pageCount}>
 					{'>>'}
 				</PageBtn>
 			</PageWrapper>

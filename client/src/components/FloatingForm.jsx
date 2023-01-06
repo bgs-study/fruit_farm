@@ -36,7 +36,7 @@ const FloatingForm = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const formData = useSelector(({form}) => form);
-	const {startTime, endTime, price, date, personnel, timeId} = formData;
+	const {startTime, endTime, price : RatePerPerson, date, personnel, timeId} = formData;
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -57,7 +57,7 @@ const FloatingForm = () => {
 				date : date,
 				farm: name,
 				headCount : headCount,
-				price: price,
+				price: RatePerPerson,
 				totalPrice: totalPrice,				
 				startTime : startTime,
 				endTime : endTime,
@@ -70,7 +70,7 @@ const FloatingForm = () => {
 	};
 
 	useEffect(() => {
-		setTotalPrice(headCount * price);
+		setTotalPrice(headCount * RatePerPerson);
 		dispatch(getHeadCount(headCount));
 	}, [headCount]);
 
@@ -83,7 +83,7 @@ const FloatingForm = () => {
 			<Form onSubmit={handleSubmit}>
 				<StyledParagraph>{date||'날짜를 선택하세요'}</StyledParagraph>
 				<StyledParagraph>{startTime || '시작시간'} ~ {endTime || '종료시간'}</StyledParagraph>
-				<StyledParagraph>{price}원/명</StyledParagraph>
+				<StyledParagraph>{RatePerPerson}원/명</StyledParagraph>
 				<SelectBox onChange={handleHeadCount} value={headCount}>
 					<option value='none'>=선택=</option>
 					{personnel && [...Array(personnel).keys()].map((n) => (

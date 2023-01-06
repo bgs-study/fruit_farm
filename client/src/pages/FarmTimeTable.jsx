@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { showModal, closeModal } from '../store/ModalSlice';
 import { initDate } from '../store/FormSlice';
@@ -105,14 +105,12 @@ const TimeTable = ()=>{
     // memo 지혜 : 페이지네이션
     const [page, setPage] = useState(1);    
     const [lastId, setLastId] = useState([0]);
-    const [first,setFirst] = useState(1);
-    const [last,setLast] = useState(1);
     const [pageGroup, setPageGroup] = useState(0);
 
-    const limit = 20;
-    const perpage = 5;
-    const pageCount = limit / perpage;
-    const offset = ((page-1) - (pageCount * pageGroup) )* perpage;
+    const LIMIT = 20;
+    const PER_PAGE = 5;
+    const PAGE_COUNT = LIMIT / PER_PAGE;
+    const offset = ((page-1) - (PAGE_COUNT * pageGroup) )* PER_PAGE;
 
     const dispatch = useDispatch();
     const modalOpen = useSelector(({modal}) => modal);
@@ -120,12 +118,11 @@ const TimeTable = ()=>{
     const fetchData = async () => {
         try {
             await API.get(`/api/farmers/farmInfo`)
-            await API.get(`/api/timetables/owner?lastId=${lastId[pageGroup]}&limit=${limit}`).then(
-                (res) => {
-                    const data = res.data;
-                    setTimeTable([...data]);
-                }
-            );
+            await API.get(`/api/timetables/owner?lastId=${lastId[pageGroup]}&limit=${LIMIT}`)
+                .then((res) => res.data)
+                .then((data) => {
+                    return setTimeTable([...data]);
+                });
         }
         catch(e){
             if (e.response.data.message ==='농장주에게 등록된 농장이 없습니다.'){
@@ -137,9 +134,12 @@ const TimeTable = ()=>{
 
     const handleSubmit = async(e , target) =>{   
         e.preventDefault();
+        const MINIMUM_OF_TIMELIST_LENGTH = 1;
+        const PRICE_PER_PERSON = 1;
+
         //memo 지혜 : 체험테이블 생성
         if (target === ''){ 
-            if(postData.timeList.length < 1 || cost < 1 || !postData.startDate || !postData.endDate) {
+            if(postData.timeList.length < MINIMUM_OF_TIMELIST_LENGTH || cost < PRICE_PER_PERSON || !postData.startDate || !postData.endDate) {
                 alert('모든 값을 올바르게 기입해주세요');
                 return;
             };
@@ -174,7 +174,7 @@ const TimeTable = ()=>{
         //memo 지혜 : 체험테이블 수정
         else {
             try {
-                const res = await API.put(`/api/timetables/${target}`,{
+                await API.put(`/api/timetables/${target}`,{
                     'date': date[0],
                     'personnel':maxHeadCount[0],
                     'price':cost,
@@ -250,7 +250,7 @@ const TimeTable = ()=>{
             <Subject>체험시간표</Subject>
             <AddTimTable type='button' onClick = {handleCreate}>추가하기</AddTimTable>
             { timeTable.length > 0 ? 
-                    timeTable.slice(offset, offset + perpage).map((table,idx) =>{
+                    timeTable.slice(offset, offset + PER_PAGE).map((table,idx) =>{
                         const {id, url, date, start_time, end_time, price, personnel} = table;
                         return(
                             <TimeTableList key={idx}>
@@ -286,13 +286,13 @@ const TimeTable = ()=>{
                             </TimeTableList>
                         )
                     }) 
-                    : (<FailAnnouncement>체험시간표를 추가하세요</FailAnnouncement>) 
+                : <FailAnnouncement>체험시간표를 추가하세요</FailAnnouncement>
             }
             { timeTable.length > 0 
-                && <Pagination pageCount={pageCount} timeTable={timeTable} 
-                perpage={perpage} page={page} setPage={setPage}
+                && <Pagination pageCount={PAGE_COUNT} perpage={PER_PAGE} 
+                timeTable={timeTable} 
+                page={page} setPage={setPage} 
                 pageGroup={pageGroup} setPageGroup={setPageGroup} 
-                first={first} setFirst={setFirst} last={last} setLast={setLast} 
                 lastId = {lastId} setLastId={setLastId}/>
             }
         </FarmFormat>

@@ -69,15 +69,18 @@ const FarmTime = (props) =>{
     };
 
     const onCreateTime = () =>{
+        const MINIMUM_NUM_OF_PEOPLE = 1;
+        const MINIMUM_FOR_TIME = 1;
+
         if(!isNaN(startTime)){
             alert('시작시간을 입력해주세요.');
             return;
         }
-        if(maxHeadCount<1){
+        if(maxHeadCount < MINIMUM_NUM_OF_PEOPLE ){
             alert('인원은 1명 이상으로 입력해주세요.');
             return;
         }
-        if(forTime<1){
+        if(forTime < MINIMUM_FOR_TIME){
             alert('체험시간은 1시간 이상으로 입력해주세요.');
             return;
         }
@@ -88,7 +91,6 @@ const FarmTime = (props) =>{
                 return;
             }
         }
-
         setTimeList([...timeList, [startTime, endTime]]);
         setMaxHeadCountList([...maxHeadCountList,maxHeadCount]);
     };
@@ -149,7 +151,6 @@ const FarmTime = (props) =>{
                 el.disabled = false;
             }
         }
-        
         renderTime();
     },[timeList]);
 
